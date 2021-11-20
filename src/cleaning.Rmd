@@ -1,0 +1,87 @@
+---
+title: "cleaning"
+---
+
+
+```{r message = FALSE}
+library(ggplot2)
+library(tidyverse)
+library(dplyr)
+library(tidyr)
+
+```
+
+Let us begin by loading the dataset
+```{r, echo=FALSE}
+df <- read.csv("data/DOHMH_New_York_City_Restaurant_Inspection_Results.csv", na.strings = c("", "NA"))
+
+head(df)
+```
+
+We will first drop the columns for which the creator has not provided any information as well as those columns which we believe are not useful for drawing insights.
+
+```{r, echo=FALSE}
+df <- subset(df, select = -c(BUILDING, STREET, PHONE, RECORD.DATE, GRADE.DATE, Latitude, Longitude, Community.Board, Council.District, Census.Tract, BIN, BBL, NTA) )
+
+head(df)
+```
+
+Let us rename each column to its shorter version for easier access
+
+```{r, echo=FALSE}
+names(df) <- c('camis', 'dba', 'boro', 'zip', 'cuisine', 'insp.date', 'action', 'vio.code', 'vio.desc', 'flag', 'score', 'grade', 'insp.type')
+
+head(df)
+```
+
+
+```{r, echo=FALSE}
+unique(df$boro)
+```
+
+'0' borough is vague, we'll drop these rows: 
+```{r, echo=FALSE}
+print(paste0('There are ', count(df[df$boro == '0',]), ' rows with 0 as the borough'))
+```
+
+```{r, echo=FALSE}
+df <- df[df$boro!='0',]
+```
+
+
+```{r, echo=FALSE}
+sapply(df, class)
+```
+
+```{r, echo=FALSE}
+factor_cols = c('camis', 'dba', 'boro', 'zip', 'cuisine', 'action', 'vio.code', 'vio.desc', 'flag', 'grade', 'insp.type')
+
+for (col in factor_cols) {
+  df[[col]] <- as.factor(df[[col]])
+}
+
+date_cols = c('insp.date')
+
+for (col in date_cols) {
+  df[[col]] <- as.Date(df[[col]] , format="%m/%d/%Y") 
+}
+
+sapply(df,class)
+```
+
+We will now drop the duplicate rows
+
+```{r, echo=FALSE}
+print(paste0("Number of rows originally: ", count(df)))
+
+df <- distinct(df)
+
+print(paste0("Number of rows after removing duplicates: ", count(df)))
+```
+
+Let us now save this cleaned dataset
+```{r, echo=FALSE}
+saveRDS(df, file='data/cleaned_DOHMH_New_York_City_Restaurant_Inspection_Results.Rda')
+```
+
+
