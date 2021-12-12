@@ -12,8 +12,9 @@ library(tidyr)
 ```
 
 Let us begin by loading the dataset
+
 ```{r, echo=FALSE}
-df <- read.csv("data/DOHMH_New_York_City_Restaurant_Inspection_Results.csv", na.strings = c("", "NA"))
+df <- read.csv("data/raw/DOHMH_New_York_City_Restaurant_Inspection_Results.csv", na.strings = c("", "NA"))
 
 head(df)
 ```
@@ -21,7 +22,7 @@ head(df)
 We will first drop the columns for which the creator has not provided any information as well as those columns which we believe are not useful for drawing insights.
 
 ```{r, echo=FALSE}
-df <- subset(df, select = -c(BUILDING, STREET, PHONE, RECORD.DATE, GRADE.DATE, Latitude, Longitude, Community.Board, Council.District, Census.Tract, BIN, BBL, NTA) )
+df <- subset(df, select = -c(BUILDING, PHONE, RECORD.DATE, GRADE.DATE, Community.Board, Council.District, Census.Tract, BIN, BBL, NTA) )
 
 head(df)
 ```
@@ -29,14 +30,21 @@ head(df)
 Let us rename each column to its shorter version for easier access
 
 ```{r, echo=FALSE}
-names(df) <- c('camis', 'dba', 'boro', 'zip', 'cuisine', 'insp.date', 'action', 'vio.code', 'vio.desc', 'flag', 'score', 'grade', 'insp.type')
+names(df) <- c('camis', 'dba', 'boro', 'street', 'zip', 'cuisine', 'insp.date', 'action', 'vio.code', 'vio.desc', 'flag', 'score', 'grade', 'insp.type', 'latitude', 'longitude')
+```
+
+We will separate out inspection type into two columns denoting inspection program and inspection type
+
+```{r, echo=FALSE}
+df <- df %>%
+  separate(insp.type, c("insp.prog", "insp.type"), sep = " / ")
 
 head(df)
 ```
 
-
+Consider the unique values in borough
 ```{r, echo=FALSE}
-unique(df$boro)
+table(df$boro)
 ```
 
 '0' borough is vague, we'll drop these rows: 
@@ -48,13 +56,26 @@ print(paste0('There are ', count(df[df$boro == '0',]), ' rows with 0 as the boro
 df <- df[df$boro!='0',]
 ```
 
+Consider the unique values in grade column:
+
+```{r, echo=FALSE}
+table(df$grade)
+```
+
+
+As per the data dictionary, grade value 'G' is not defined. Since only one row contains this, we can get rid of this row.
+
+```{r}
+df <- df[!(df$grade %in% c('G')),]
+```
 
 ```{r, echo=FALSE}
 sapply(df, class)
 ```
 
+
 ```{r, echo=FALSE}
-factor_cols = c('camis', 'dba', 'boro', 'zip', 'cuisine', 'action', 'vio.code', 'vio.desc', 'flag', 'grade', 'insp.type')
+factor_cols = c('camis', 'dba', 'boro', 'zip', 'cuisine', 'action', 'vio.code', 'vio.desc', 'flag', 'grade', 'insp.prog', 'insp.type')
 
 for (col in factor_cols) {
   df[[col]] <- as.factor(df[[col]])
@@ -69,6 +90,7 @@ for (col in date_cols) {
 sapply(df,class)
 ```
 
+
 We will now drop the duplicate rows
 
 ```{r, echo=FALSE}
@@ -79,9 +101,26 @@ df <- distinct(df)
 print(paste0("Number of rows after removing duplicates: ", count(df)))
 ```
 
+We will replace lengthy categories in 'action' by keywords
+
+```{r}
+table(df$action)
+```
+
+```{r, echo=FALSE}
+levels(df$action) <- c('closed', 'reclosed', 'reopened', 'no violations', 'violations')
+```
+
+```{r}
+table(df$action)
+```
+
 Let us now save this cleaned dataset
 ```{r, echo=FALSE}
-saveRDS(df, file='data/cleaned_DOHMH_New_York_City_Restaurant_Inspection_Results.Rda')
+df <- df %>%
+  janitor::clean_names()
+
+saveRDS(df, file='data/clean/post_cleaning.Rda')
 ```
 
 

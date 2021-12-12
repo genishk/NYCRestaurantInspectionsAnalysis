@@ -166,7 +166,8 @@ plot_missing <- function(x, percent = FALSE){
 
 ```{r, echo=FALSE}
 # load the cleaned dataset
-df <- readRDS(file='data/cleaned_DOHMH_New_York_City_Restaurant_Inspection_Results.Rda')
+df <- readRDS(file='data/clean/post_cleaning.Rda') %>%
+  select(-street, -longitude, -latitude)
 
 # shorten the column names so they don't overlap in the plot
 names(df) <- abbreviate(names(df), minlength=5)
@@ -211,7 +212,7 @@ To better understand the pattern of missing values, we have to check for any pla
 Let us try to see when most of the inspections were conducted.
 
 ```{r, echo=FALSE, fig.height=7, fig.width=12}
-t <- as.numeric(format(df$insp.d,"%Y"))
+t <- as.numeric(format(df$insp_d,"%Y"))
 
 ggplot() + aes(t) + geom_boxplot() + xlab('Year of inspection')
 ```
@@ -220,7 +221,7 @@ ggplot() + aes(t) + geom_boxplot() + xlab('Year of inspection')
 Here, we can see that the inspection date with year = 1900 is an outlier and possibly a placeholder for missing values. We confirm below by analyzing the missing patterns of the subset of our dataset with the inspection year 1900.
 
 ```{r, echo=FALSE, fig.height=7, fig.width=12}
-t <- subset(df, df$insp.d>='1900-01-01' & df$insp.d<='1900-12-31')[, !colnames(df) %in% c('insp.d')]
+t <- subset(df, df$insp_d>='1900-01-01' & df$insp_d<='1900-12-31')[, !colnames(df) %in% c('insp_d')]
 
 
 plot_missing(t, percent = TRUE)
@@ -263,7 +264,50 @@ plot_missing(t, percent = TRUE) + ggtitle('Bronx borough')
 We can see that none of these seem to display any relation between missing-patterns and boroughs, which is worth investigating further.
 
 
+## Transformation
+
+We drop the rows that have 1900 as their inspection year
+
+```{r, echo=FALSE}
+df <- readRDS(file='data/clean/post_cleaning.Rda')
+
+df <- df[!(df$insp_date>='1900-01-01' & df$insp_date<='1900-12-31'),]
+
+```
 
 
+```{r}
+head(df)
+```
+
+
+Further, consider 
+
+```{r}
+t <- df
+
+t <- t %>%
+  count(insp_year = year(insp_date)) %>%
+  slice(1:10) 
+
+t$insp_year <- as.factor(as.character(t$insp_year))
+
+t
+```
+We can see that there are very few observations from the years before 2016. In order to draw meaningful insights, we shall drop all rows with inspection year less than 2016 as we have very less data from this time period. Hence, we'll analyse only the subset with inspection year from 2016 to 2021.
+
+```{r, echo=FALSE}
+df <- df[df$insp_date>='2016-01-01',]
+
+```
+
+
+Let us now save this dataset for further analysis
+
+```{r, echo=FALSE}
+head(df)
+
+saveRDS(df, file='data/clean/post_missing.Rda')
+```
 
 
