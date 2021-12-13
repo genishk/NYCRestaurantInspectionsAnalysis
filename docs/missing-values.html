@@ -24,7 +24,7 @@
 <meta name="author" content="Vishweshwar Tyagi, SeokHyun Kim" />
 
 
-<meta name="date" content="2021-11-19" />
+<meta name="date" content="2021-12-12" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -53,6 +53,12 @@
 
 <link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
 <script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+<script src="libs/core-js-2.5.3/shim.min.js"></script>
+<script src="libs/react-17.0.0/react.min.js"></script>
+<script src="libs/react-17.0.0/react-dom.min.js"></script>
+<script src="libs/reactwidget-1.0.0/react-tools.js"></script>
+<script src="libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
+<script src="libs/reactable-binding-0.2.3/reactable.js"></script>
 
 
 <style type="text/css">
@@ -180,7 +186,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>We can see that most of the data in rows with the inspection year equal to 1900 is missing. Therefore, we will consider dropping these rows.</p>
 <p>Let us try to understand if there’s any relation between missing-patterns and borough.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="missing-values.html#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(df<span class="sc">$</span>boro)</span></code></pre></div>
-<pre><code>## [1] Manhattan     Queens        Brooklyn      Staten Island Bronx         0             210          
+<pre><code>## [1] Manhattan     Queens        Brooklyn      Staten Island Bronx         0            
+## [7] 210          
 ## Levels: 0 210 Bronx Brooklyn Manhattan Queens Staten Island</code></pre>
 <p><img src="finalproj_files/figure-html/unnamed-chunk-13-1.png" width="1152" /></p>
 <p><img src="finalproj_files/figure-html/unnamed-chunk-14-1.png" width="1152" /></p>
