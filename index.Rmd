@@ -7,3 +7,12 @@ site: bookdown::bookdown_site
 
 # Introduction
 
+Our motivation for choosing New York City Restaurant Inspection Results is to analyze restaurants in terms of safety unlike the general ratings in Google Map or Yelp, and to help the public make informed decisions while choosing which restaurant to eat in New York City. In the dataset we will analyze, it contains violation citation from every inspection conducted up to three years prior to the most recent inspection for restaurants and college cafeterias. Since we will be on the lookout for patterns, it will also help us understand which areas in NYC are lagging in terms of safety. Hence, this dataset will help us answer the following questions:
+
+* What are the most common violations committed?
+* What are the locations in NYC that are safer?
+* How do non-chain restaurants compare to their counterparts, i.e., chain restaurants?
+* How does inspection score change over time?
+* Which violation increases after COVID-19?
+
+Now, let's dive deep into exploratory data analysis and visualization!
