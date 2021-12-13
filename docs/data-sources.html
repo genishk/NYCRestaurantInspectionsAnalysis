@@ -80,7 +80,13 @@
 
 <li class="divider"></li>
 <li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a></li>
-<li class="chapter" data-level="2" data-path="data-sources.html"><a href="data-sources.html"><i class="fa fa-check"></i><b>2</b> Data sources</a></li>
+<li class="chapter" data-level="2" data-path="data-sources.html"><a href="data-sources.html"><i class="fa fa-check"></i><b>2</b> Data sources</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="data-sources.html"><a href="data-sources.html#who-is-responsible-for-collecting-the-data"><i class="fa fa-check"></i><b>2.1</b> Who is responsible for collecting the data?</a></li>
+<li class="chapter" data-level="2.2" data-path="data-sources.html"><a href="data-sources.html#why-and-how-is-the-data-collected"><i class="fa fa-check"></i><b>2.2</b> Why and How is the data collected?</a></li>
+<li class="chapter" data-level="2.3" data-path="data-sources.html"><a href="data-sources.html#basic-information-about-the-dataset"><i class="fa fa-check"></i><b>2.3</b> Basic information about the dataset</a></li>
+<li class="chapter" data-level="2.4" data-path="data-sources.html"><a href="data-sources.html#issues"><i class="fa fa-check"></i><b>2.4</b> Issues</a></li>
+</ul></li>
 <li class="chapter" data-level="3" data-path="data-transformation.html"><a href="data-transformation.html"><i class="fa fa-check"></i><b>3</b> Data transformation</a></li>
 <li class="chapter" data-level="4" data-path="missing-values.html"><a href="missing-values.html"><i class="fa fa-check"></i><b>4</b> Missing values</a>
 <ul>
@@ -118,7 +124,31 @@
             <section class="normal" id="section-">
 <div id="data-sources" class="section level1" number="2">
 <h1><span class="header-section-number">Chapter 2</span> Data sources</h1>
+<div id="who-is-responsible-for-collecting-the-data" class="section level2" number="2.1">
+<h2><span class="header-section-number">2.1</span> Who is responsible for collecting the data?</h2>
+<p>NYC government’s health department conducts unexpected inspections for restaurants in New York City at least once a year. During COVID-19 before August 14 2021, the inspection was stopped but now the NYC Health Department is conducting full inspections, including issuing letter grades and summonses subject to fines.</p>
+</div>
+<div id="why-and-how-is-the-data-collected" class="section level2" number="2.2">
+<h2><span class="header-section-number">2.2</span> Why and How is the data collected?</h2>
+<p>All restaurants are required to be in compliance with NYS and NYC Food Safety Regulations, found in New York City Health Code Article 81. By inspection, health department want to check that restaurants comply with food safety rules. Violations of food safety rules have point values for each item, and total score of restaurant results in a specific letter grade. The lower the score, the better the grade.</p>
+</div>
+<div id="basic-information-about-the-dataset" class="section level2" number="2.3">
+<h2><span class="header-section-number">2.3</span> Basic information about the dataset</h2>
+<p>The dataset contains details on violation citations against restaurants from every inspection conducted by the NYC government.It includes inspection results for active restaurants for the last three years. Inactive restaurants and any violations cited during the inspection that were dismissed during adjudication are excluded. Here is the basic information of dataset and each variable.</p>
+<ul>
+<li>Update Frequency : Daily</li>
+<li>Num of records : 383,199</li>
+<li>Agency: Department of Health and Mental Hygiene (DOHMH)</li>
+<li>Each row is a : Restaurant Citations</li>
+</ul>
+<div id="htmlwidget-f24ad766df141a6a5963" class="reactable html-widget" style="width:auto;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-f24ad766df141a6a5963">{"x":{"tag":{"name":"Reactable","attribs":{"data":{"Variable":["CAMIS","DBA","BORO","BUILDING","STREET","ZIPCODE","PHONE","CUISINE DESCRIPTION","INSPECTION DATE","ACTION","VIOLATION CODE","VIOLATION DESCRIPTION","CRITICAL FLAG","SCORE","GRADE","GRADE DATE","RECORD DATE","INSPECTION TYPE"],"Description":["Unique identifier for the establishment (restaurant)","Establishment (restaurant) name","Borough of establishment (restaurant) location","Building number for establishment (restaurant) location","Street name for establishment (restaurant) location","Zip code of establishment (restaurant) location","Phone number","Establishment (restaurant) cuisine","Inspection date","Action associated with each establishment (restaurant) inspection","Violation code associated with an establishment (restaurant) inspection","Violation description associated with an establishment  (restaurant) inspection","Indicator of critical violation","Total score for a particular inspection","Grade associated with the inspection","Date when grade was issued to the establishment (restaurant)","Date record was added to dataset","A combination of the inspection program and the type of inspection performed"]},"columns":[{"accessor":"Variable","name":"Variable","type":"character"},{"accessor":"Description","name":"Description","type":"character"}],"defaultPageSize":10,"paginationType":"numbers","showPageInfo":true,"minRows":1,"dataKey":"ae543e0c358250347dee5889151329ab","key":"ae543e0c358250347dee5889151329ab"},"children":[]},"class":"reactR_markup"},"evals":[],"jsHooks":[]}</script>
+</div>
+<div id="issues" class="section level2" number="2.4">
+<h2><span class="header-section-number">2.4</span> Issues</h2>
+<p>Records are also included for each restaurant that has applied for a permit but has not yet been inspected and for inspections resulting in no violations. Establishments with inspection date of 1/1/1900 are new establishments that have not yet received an inspection. This records can make errors when analyzing the data. So we will handle this records in ‘Data transformation’ Chapter.</p>
 
+</div>
 </div>
             </section>
 

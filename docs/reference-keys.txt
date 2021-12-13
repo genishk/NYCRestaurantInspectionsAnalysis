@@ -1,5 +1,9 @@
 introduction
 data-sources
+who-is-responsible-for-collecting-the-data
+why-and-how-is-the-data-collected
+basic-information-about-the-dataset
+issues
 data-transformation
 missing-values
 transformation
