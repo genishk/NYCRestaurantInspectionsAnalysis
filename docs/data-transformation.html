@@ -61,70 +61,6 @@
 <script src="libs/reactable-binding-0.2.3/reactable.js"></script>
 
 
-<style type="text/css">
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-    color: #aaaaaa;
-  }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-</style>
 
 
 <link rel="stylesheet" href="style.css" type="text/css" />
@@ -146,7 +82,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a></li>
 <li class="chapter" data-level="2" data-path="data-sources.html"><a href="data-sources.html"><i class="fa fa-check"></i><b>2</b> Data sources</a></li>
 <li class="chapter" data-level="3" data-path="data-transformation.html"><a href="data-transformation.html"><i class="fa fa-check"></i><b>3</b> Data transformation</a></li>
-<li class="chapter" data-level="4" data-path="missing-values.html"><a href="missing-values.html"><i class="fa fa-check"></i><b>4</b> Missing values</a></li>
+<li class="chapter" data-level="4" data-path="missing-values.html"><a href="missing-values.html"><i class="fa fa-check"></i><b>4</b> Missing values</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="missing-values.html"><a href="missing-values.html#transformation"><i class="fa fa-check"></i><b>4.1</b> Transformation</a></li>
+</ul></li>
 <li class="chapter" data-level="5" data-path="results.html"><a href="results.html"><i class="fa fa-check"></i><b>5</b> Results</a></li>
 <li class="chapter" data-level="6" data-path="interactive-component.html"><a href="interactive-component.html"><i class="fa fa-check"></i><b>6</b> Interactive component</a></li>
 <li class="chapter" data-level="7" data-path="conclusion.html"><a href="conclusion.html"><i class="fa fa-check"></i><b>7</b> Conclusion</a></li>
@@ -171,6 +110,152 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="data-transformation" class="section level1" number="3">
 <h1><span class="header-section-number">Chapter 3</span> Data transformation</h1>
+<p>Let us begin by loading the dataset</p>
+<pre><code>##      CAMIS                      DBA      BORO BUILDING             STREET ZIPCODE      PHONE
+## 1 41393637       DELICIAS MEXICANAS Manhattan     2109           3 AVENUE   10029 2128283659
+## 2 50013433                BALVANERA Manhattan      152     STANTON STREET   10002 2125333348
+## 3 50008129   COCO FRESH TEA &amp; JUICE    Queens    86-55           BROADWAY   11373 3477306730
+## 4 50100295      EL BURRITO NACHO II  Brooklyn      747    FLUSHING AVENUE   11206 9292502087
+## 5 41696471 MAISON HARLEM RESTAURANT Manhattan      341 ST NICHOLAS AVENUE   10027 2122229224
+## 6 50098871            NORIBAR SUSHI  Brooklyn      326    KINGSTON AVENUE   11213 3479138888
+##   CUISINE.DESCRIPTION INSPECTION.DATE                                          ACTION
+## 1             Mexican      03/17/2017 Violations were cited in the following area(s).
+## 2             Spanish      05/21/2019 Violations were cited in the following area(s).
+## 3          Coffee/Tea      10/15/2018 Violations were cited in the following area(s).
+## 4             Mexican      02/21/2020 Violations were cited in the following area(s).
+## 5              French      01/28/2020 Violations were cited in the following area(s).
+## 6       Jewish/Kosher      08/30/2021 Violations were cited in the following area(s).
+##   VIOLATION.CODE
+## 1            10D
+## 2            10D
+## 3            10H
+## 4            02G
+## 5            06D
+## 6            10F
+##                                                                                                                                                                                                                                                             VIOLATION.DESCRIPTION
+## 1                                                                      Mechanical or natural ventilation system not provided,  improperly installed, in disrepair and/or fails to prevent excessive build-up of grease, heat, steam condensation vapors, odors, smoke, and fumes.
+## 2                                                                      Mechanical or natural ventilation system not provided,  improperly installed, in disrepair and/or fails to prevent excessive build-up of grease, heat, steam condensation vapors, odors, smoke, and fumes.
+## 3                                                                                                                                                                                                            Proper sanitization not provided for utensil ware washing operation.
+## 4                                                                                                                                              Cold food item held above 41쨘 F (smoked fish and reduced oxygen packaged foods above 38 쨘F) except during necessary preparation.
+## 5                                                                                                                                  Food contact surface not properly washed, rinsed and sanitized after each use and following any activity when contamination may have occurred.
+## 6 Non-food contact surface improperly constructed. Unacceptable material used. Non-food contact surface or equipment improperly maintained and/or not properly sealed, raised, spaced or movable to allow accessibility for cleaning on all sides, above and underneath the unit.
+##   CRITICAL.FLAG SCORE GRADE GRADE.DATE RECORD.DATE                          INSPECTION.TYPE
+## 1  Not Critical    11     A 03/17/2017  11/18/2021    Cycle Inspection / Initial Inspection
+## 2  Not Critical    29  &lt;NA&gt;       &lt;NA&gt;  11/18/2021    Cycle Inspection / Initial Inspection
+## 3  Not Critical    22  &lt;NA&gt;       &lt;NA&gt;  11/18/2021    Cycle Inspection / Initial Inspection
+## 4      Critical    11     A 02/21/2020  11/18/2021 Pre-permit (Operational) / Re-inspection
+## 5      Critical    32  &lt;NA&gt;       &lt;NA&gt;  11/18/2021    Cycle Inspection / Initial Inspection
+## 6  Not Critical    18  &lt;NA&gt;       &lt;NA&gt;  11/18/2021    Cycle Inspection / Initial Inspection
+##   Latitude Longitude Community.Board Council.District Census.Tract     BIN        BBL  NTA
+## 1 40.79753 -73.94031             111                8        18800 1052516 1016650002 MN34
+## 2 40.72053 -73.98544             103                2         3001 1077440 1003550070 MN27
+## 3 40.73740 -73.87729             404               25        47300 4045397 4018427502 QN29
+## 4 40.70062 -73.94281             301               33        50700 3061516 3022760035 BK75
+## 5 40.81208 -73.95144             109                9        21303 1059391 1019540050 MN06
+## 6 40.66778 -73.94236             309               35        33500 3033372 3012780141 BK63</code></pre>
+<p>We will first drop the columns for which the creator has not provided any information as well as those columns which we believe are not useful for drawing insights.</p>
+<pre><code>##      CAMIS                      DBA      BORO             STREET ZIPCODE CUISINE.DESCRIPTION
+## 1 41393637       DELICIAS MEXICANAS Manhattan           3 AVENUE   10029             Mexican
+## 2 50013433                BALVANERA Manhattan     STANTON STREET   10002             Spanish
+## 3 50008129   COCO FRESH TEA &amp; JUICE    Queens           BROADWAY   11373          Coffee/Tea
+## 4 50100295      EL BURRITO NACHO II  Brooklyn    FLUSHING AVENUE   11206             Mexican
+## 5 41696471 MAISON HARLEM RESTAURANT Manhattan ST NICHOLAS AVENUE   10027              French
+## 6 50098871            NORIBAR SUSHI  Brooklyn    KINGSTON AVENUE   11213       Jewish/Kosher
+##   INSPECTION.DATE                                          ACTION VIOLATION.CODE
+## 1      03/17/2017 Violations were cited in the following area(s).            10D
+## 2      05/21/2019 Violations were cited in the following area(s).            10D
+## 3      10/15/2018 Violations were cited in the following area(s).            10H
+## 4      02/21/2020 Violations were cited in the following area(s).            02G
+## 5      01/28/2020 Violations were cited in the following area(s).            06D
+## 6      08/30/2021 Violations were cited in the following area(s).            10F
+##                                                                                                                                                                                                                                                             VIOLATION.DESCRIPTION
+## 1                                                                      Mechanical or natural ventilation system not provided,  improperly installed, in disrepair and/or fails to prevent excessive build-up of grease, heat, steam condensation vapors, odors, smoke, and fumes.
+## 2                                                                      Mechanical or natural ventilation system not provided,  improperly installed, in disrepair and/or fails to prevent excessive build-up of grease, heat, steam condensation vapors, odors, smoke, and fumes.
+## 3                                                                                                                                                                                                            Proper sanitization not provided for utensil ware washing operation.
+## 4                                                                                                                                              Cold food item held above 41쨘 F (smoked fish and reduced oxygen packaged foods above 38 쨘F) except during necessary preparation.
+## 5                                                                                                                                  Food contact surface not properly washed, rinsed and sanitized after each use and following any activity when contamination may have occurred.
+## 6 Non-food contact surface improperly constructed. Unacceptable material used. Non-food contact surface or equipment improperly maintained and/or not properly sealed, raised, spaced or movable to allow accessibility for cleaning on all sides, above and underneath the unit.
+##   CRITICAL.FLAG SCORE GRADE                          INSPECTION.TYPE Latitude Longitude
+## 1  Not Critical    11     A    Cycle Inspection / Initial Inspection 40.79753 -73.94031
+## 2  Not Critical    29  &lt;NA&gt;    Cycle Inspection / Initial Inspection 40.72053 -73.98544
+## 3  Not Critical    22  &lt;NA&gt;    Cycle Inspection / Initial Inspection 40.73740 -73.87729
+## 4      Critical    11     A Pre-permit (Operational) / Re-inspection 40.70062 -73.94281
+## 5      Critical    32  &lt;NA&gt;    Cycle Inspection / Initial Inspection 40.81208 -73.95144
+## 6  Not Critical    18  &lt;NA&gt;    Cycle Inspection / Initial Inspection 40.66778 -73.94236</code></pre>
+<p>Let us rename each column to its shorter version for easier access</p>
+<p>We will separate out inspection type into two columns denoting inspection program and inspection type</p>
+<pre><code>##      camis                      dba      boro             street   zip       cuisine  insp.date
+## 1 41393637       DELICIAS MEXICANAS Manhattan           3 AVENUE 10029       Mexican 03/17/2017
+## 2 50013433                BALVANERA Manhattan     STANTON STREET 10002       Spanish 05/21/2019
+## 3 50008129   COCO FRESH TEA &amp; JUICE    Queens           BROADWAY 11373    Coffee/Tea 10/15/2018
+## 4 50100295      EL BURRITO NACHO II  Brooklyn    FLUSHING AVENUE 11206       Mexican 02/21/2020
+## 5 41696471 MAISON HARLEM RESTAURANT Manhattan ST NICHOLAS AVENUE 10027        French 01/28/2020
+## 6 50098871            NORIBAR SUSHI  Brooklyn    KINGSTON AVENUE 11213 Jewish/Kosher 08/30/2021
+##                                            action vio.code
+## 1 Violations were cited in the following area(s).      10D
+## 2 Violations were cited in the following area(s).      10D
+## 3 Violations were cited in the following area(s).      10H
+## 4 Violations were cited in the following area(s).      02G
+## 5 Violations were cited in the following area(s).      06D
+## 6 Violations were cited in the following area(s).      10F
+##                                                                                                                                                                                                                                                                          vio.desc
+## 1                                                                      Mechanical or natural ventilation system not provided,  improperly installed, in disrepair and/or fails to prevent excessive build-up of grease, heat, steam condensation vapors, odors, smoke, and fumes.
+## 2                                                                      Mechanical or natural ventilation system not provided,  improperly installed, in disrepair and/or fails to prevent excessive build-up of grease, heat, steam condensation vapors, odors, smoke, and fumes.
+## 3                                                                                                                                                                                                            Proper sanitization not provided for utensil ware washing operation.
+## 4                                                                                                                                              Cold food item held above 41쨘 F (smoked fish and reduced oxygen packaged foods above 38 쨘F) except during necessary preparation.
+## 5                                                                                                                                  Food contact surface not properly washed, rinsed and sanitized after each use and following any activity when contamination may have occurred.
+## 6 Non-food contact surface improperly constructed. Unacceptable material used. Non-food contact surface or equipment improperly maintained and/or not properly sealed, raised, spaced or movable to allow accessibility for cleaning on all sides, above and underneath the unit.
+##           flag score grade                insp.prog          insp.type latitude longitude
+## 1 Not Critical    11     A         Cycle Inspection Initial Inspection 40.79753 -73.94031
+## 2 Not Critical    29  &lt;NA&gt;         Cycle Inspection Initial Inspection 40.72053 -73.98544
+## 3 Not Critical    22  &lt;NA&gt;         Cycle Inspection Initial Inspection 40.73740 -73.87729
+## 4     Critical    11     A Pre-permit (Operational)      Re-inspection 40.70062 -73.94281
+## 5     Critical    32  &lt;NA&gt;         Cycle Inspection Initial Inspection 40.81208 -73.95144
+## 6 Not Critical    18  &lt;NA&gt;         Cycle Inspection Initial Inspection 40.66778 -73.94236</code></pre>
+<p>Consider the unique values in borough</p>
+<pre><code>## 
+##             0           210         Bronx      Brooklyn     Manhattan        Queens Staten Island 
+##           118             2         35564         97059        149598         88597         12261</code></pre>
+<p>‘0’ borough is vague, we’ll drop these rows:</p>
+<pre><code>## [1] &quot;There are 118 rows with 0 as the borough&quot;</code></pre>
+<p>Consider the unique values in grade column:</p>
+<pre><code>## 
+## 01/03/2019 01/03/2020          A          B          C          G          N          P 
+##          1          1     152011      23514       9222          1       4889       2487 
+##          Z 
+##       1324</code></pre>
+<p>As per the data dictionary, grade value ‘G’ is not defined. Since only one row contains this, we can get rid of this row.</p>
+<pre><code>##       camis         dba        boro      street         zip     cuisine   insp.date      action 
+##   &quot;integer&quot; &quot;character&quot; &quot;character&quot; &quot;character&quot; &quot;character&quot; &quot;character&quot; &quot;character&quot; &quot;character&quot; 
+##    vio.code    vio.desc        flag       score       grade   insp.prog   insp.type    latitude 
+## &quot;character&quot; &quot;character&quot; &quot;character&quot; &quot;character&quot; &quot;character&quot; &quot;character&quot; &quot;character&quot;   &quot;numeric&quot; 
+##   longitude 
+##   &quot;numeric&quot;</code></pre>
+<pre><code>##       camis         dba        boro      street         zip     cuisine   insp.date      action 
+##    &quot;factor&quot;    &quot;factor&quot;    &quot;factor&quot; &quot;character&quot;    &quot;factor&quot;    &quot;factor&quot;      &quot;Date&quot;    &quot;factor&quot; 
+##    vio.code    vio.desc        flag       score       grade   insp.prog   insp.type    latitude 
+##    &quot;factor&quot;    &quot;factor&quot;    &quot;factor&quot; &quot;character&quot;    &quot;factor&quot;    &quot;factor&quot;    &quot;factor&quot;   &quot;numeric&quot; 
+##   longitude 
+##   &quot;numeric&quot;</code></pre>
+<p>We will now drop the duplicate rows</p>
+<pre><code>## [1] &quot;Number of rows originally: 383080&quot;</code></pre>
+<pre><code>## [1] &quot;Number of rows after removing duplicates: 360458&quot;</code></pre>
+<p>We will replace lengthy categories in ‘action’ by keywords</p>
+<pre><code>## 
+## Establishment Closed by DOHMH. Violations were cited in the following area(s) and those requiring immediate action were addressed. 
+##                                                                                                                              14427 
+##                                                                                                  Establishment re-closed by DOHMH. 
+##                                                                                                                                 65 
+##                                                                                                  Establishment re-opened by DOHMH. 
+##                                                                                                                               3867 
+##                                                                        No violations were recorded at the time of this inspection. 
+##                                                                                                                               4463 
+##                                                                                    Violations were cited in the following area(s). 
+##                                                                                                                             333309</code></pre>
+<pre><code>## 
+##        closed      reclosed      reopened no violations    violations 
+##         14427            65          3867          4463        333309</code></pre>
+<p>Let us now save this cleaned dataset</p>
 
 </div>
             </section>

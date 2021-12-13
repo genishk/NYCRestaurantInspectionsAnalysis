@@ -2,6 +2,7 @@ introduction
 data-sources
 data-transformation
 missing-values
+transformation
 results
 interactive-component
 conclusion

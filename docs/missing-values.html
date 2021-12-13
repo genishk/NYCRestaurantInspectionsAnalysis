@@ -61,70 +61,6 @@
 <script src="libs/reactable-binding-0.2.3/reactable.js"></script>
 
 
-<style type="text/css">
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-    color: #aaaaaa;
-  }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-</style>
 
 
 <link rel="stylesheet" href="style.css" type="text/css" />
@@ -146,7 +82,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a></li>
 <li class="chapter" data-level="2" data-path="data-sources.html"><a href="data-sources.html"><i class="fa fa-check"></i><b>2</b> Data sources</a></li>
 <li class="chapter" data-level="3" data-path="data-transformation.html"><a href="data-transformation.html"><i class="fa fa-check"></i><b>3</b> Data transformation</a></li>
-<li class="chapter" data-level="4" data-path="missing-values.html"><a href="missing-values.html"><i class="fa fa-check"></i><b>4</b> Missing values</a></li>
+<li class="chapter" data-level="4" data-path="missing-values.html"><a href="missing-values.html"><i class="fa fa-check"></i><b>4</b> Missing values</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="missing-values.html"><a href="missing-values.html#transformation"><i class="fa fa-check"></i><b>4.1</b> Transformation</a></li>
+</ul></li>
 <li class="chapter" data-level="5" data-path="results.html"><a href="results.html"><i class="fa fa-check"></i><b>5</b> Results</a></li>
 <li class="chapter" data-level="6" data-path="interactive-component.html"><a href="interactive-component.html"><i class="fa fa-check"></i><b>6</b> Interactive component</a></li>
 <li class="chapter" data-level="7" data-path="conclusion.html"><a href="conclusion.html"><i class="fa fa-check"></i><b>7</b> Conclusion</a></li>
@@ -172,30 +111,102 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="missing-values" class="section level1" number="4">
 <h1><span class="header-section-number">Chapter 4</span> Missing values</h1>
 <p>Let us analyze the missing patterns in our data frame</p>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-8-1.png" width="1152" /><img src="finalproj_files/figure-html/unnamed-chunk-8-2.png" width="1152" /></p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-27-1.png" width="1152" /><img src="finalproj_files/figure-html/unnamed-chunk-27-2.png" width="1152" /></p>
 <p>According to the output of plot_missing function, we can confirm that there are a total of 29 missing patterns in our dataset. But if we look at plots in detail, the most common pattern is the one that has no missing values, followed by the pattern with missing values only in the ‘grade’ column. These two cases account for almost all of the most frequent missing patterns. We can also infer from the upper side plot that ‘grade’ has about 50% of its missing values and all other columns have relatively much fewer proportions of missing values.</p>
 <p>Since there are so many rows with missing values in ‘grade’, dropping these rows would not make sense. Instead, we will try to impute the ‘grade’ column values by finding exciting patterns in the dataset in further exploration.</p>
-<p>Let us now try to see how many rows have a given number of missing values.</p>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-9-1.png" width="1152" /></p>
+<p>Let us now try to see how many rows have a given number of missing values.
+<img src="finalproj_files/figure-html/unnamed-chunk-28-1.png" width="1152" /></p>
 <p>We can see that most of the rows in our dataset either have no missing values or have exactly one missing value. The reason for this is evident from the missing-patterns plot we showed above; since the column ‘grade’ has so many missing values. This will be fixed when we impute the values for ‘grade’. We will consider dropping rows with more than five missing values; this is reasonable as these rows are relatively less in quantity.</p>
 <p>To better understand the pattern of missing values, we have to check for any placeholders for missing values. A nice strategy for this is to look for outliers.</p>
 <p>Let us try to see when most of the inspections were conducted.</p>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-10-1.png" width="1152" /></p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-29-1.png" width="1152" /></p>
 <p>Here, we can see that the inspection date with year = 1900 is an outlier and possibly a placeholder for missing values. We confirm below by analyzing the missing patterns of the subset of our dataset with the inspection year 1900.</p>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-11-1.png" width="1152" /></p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-30-1.png" width="1152" /></p>
 <p>We can see that most of the data in rows with the inspection year equal to 1900 is missing. Therefore, we will consider dropping these rows.</p>
 <p>Let us try to understand if there’s any relation between missing-patterns and borough.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="missing-values.html#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(df<span class="sc">$</span>boro)</span></code></pre></div>
-<pre><code>## [1] Manhattan     Queens        Brooklyn      Staten Island Bronx         0            
-## [7] 210          
-## Levels: 0 210 Bronx Brooklyn Manhattan Queens Staten Island</code></pre>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-13-1.png" width="1152" /></p>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-14-1.png" width="1152" /></p>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-15-1.png" width="1152" /></p>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-16-1.png" width="1152" /></p>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-17-1.png" width="1152" /></p>
+<pre><code>## [1] Queens        Brooklyn      Manhattan     Bronx         Staten Island
+## Levels: Bronx Brooklyn Manhattan Queens Staten Island</code></pre>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-32-1.png" width="672" /></p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-33-1.png" width="1152" /></p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-34-1.png" width="1152" /></p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-35-1.png" width="1152" /></p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-36-1.png" width="1152" /></p>
 <p>We can see that none of these seem to display any relation between missing-patterns and boroughs, which is worth investigating further.</p>
+<div id="transformation" class="section level2" number="4.1">
+<h2><span class="header-section-number">4.1</span> Transformation</h2>
+<p>We drop the rows that have 1900 as their inspection year</p>
+<pre><code>##      camis                               dba      boro           street   zip   cuisine
+## 1 41170643         LITTLE MOROCCO RESTAURANT    Queens  STEINWAY STREET 11103  Moroccan
+## 2 41610426              GLOW THAI RESTAURANT  Brooklyn         3 AVENUE 11209      Thai
+## 3 41711813                     BEDFORD FALLS Manhattan EAST   67 STREET 10065  American
+## 4 41429907                      MARIO&#39;S DELI  Brooklyn    NASSAU AVENUE 11222  American
+## 5 41624260                 ZENG&#39;S RESTAURANT  Brooklyn    FOURTH AVENUE 11232   Chinese
+## 6 41530091 JOY &amp; SNOOK RESTAURANT AND BAKERY  Brooklyn  NOSTRAND AVENUE 11216 Caribbean
+##    insp_date     action vio_code
+## 1 2019-11-04 violations      05H
+## 2 2019-08-29 violations      08A
+## 3 2016-07-22 violations      10I
+## 4 2019-08-30 violations      04F
+## 5 2018-12-10 violations      06D
+## 6 2017-10-03 violations      22F
+##                                                                                                                                         vio_desc
+## 1                                                                 No facilities available to wash, rinse and sanitize utensils and/or equipment.
+## 2             Facility not vermin proof. Harborage or conditions conducive to attracting vermin to the premises and/or allowing vermin to exist.
+## 3                                                              Single service item reused, improperly stored, dispensed; not used when required.
+## 4                     Food, food preparation area, food storage area, area used by employees or patrons, contaminated by sewage or liquid waste.
+## 5 Food contact surface not properly washed, rinsed and sanitized after each use and following any activity when contamination may have occurred.
+## 6                                                                                                                        MISBRANDED AND LABELING
+##           flag score grade        insp_prog          insp_type latitude longitude
+## 1     Critical    37  &lt;NA&gt; Cycle Inspection Initial Inspection 40.76848 -73.91123
+## 2 Not Critical     9     A Cycle Inspection      Re-inspection 40.63386 -74.02680
+## 3 Not Critical     9     A Cycle Inspection Initial Inspection 40.76636 -73.96250
+## 4     Critical    13     A Cycle Inspection      Re-inspection 40.72597 -73.94060
+## 5     Critical    28     C Cycle Inspection      Re-inspection 40.65439 -74.00434
+## 6 Not Critical    29  &lt;NA&gt; Cycle Inspection Initial Inspection 40.67266 -73.95025</code></pre>
+<p>Further, consider</p>
+<pre><code>##    insp_year      n
+## 1       2009      1
+## 2       2013      8
+## 3       2014     15
+## 4       2015    116
+## 5       2016  10400
+## 6       2017  57401
+## 7       2018  98407
+## 8       2019 136652
+## 9       2020  29512
+## 10      2021  24635</code></pre>
+<p>We can see that there are very few observations from the years before 2016. In order to draw meaningful insights, we shall drop all rows with inspection year less than 2016 as we have very less data from this time period. Hence, we’ll analyse only the subset with inspection year from 2016 to 2021.</p>
+<p>Let us now save this dataset for further analysis</p>
+<pre><code>##      camis                               dba      boro           street   zip   cuisine
+## 1 41170643         LITTLE MOROCCO RESTAURANT    Queens  STEINWAY STREET 11103  Moroccan
+## 2 41610426              GLOW THAI RESTAURANT  Brooklyn         3 AVENUE 11209      Thai
+## 3 41711813                     BEDFORD FALLS Manhattan EAST   67 STREET 10065  American
+## 4 41429907                      MARIO&#39;S DELI  Brooklyn    NASSAU AVENUE 11222  American
+## 5 41624260                 ZENG&#39;S RESTAURANT  Brooklyn    FOURTH AVENUE 11232   Chinese
+## 6 41530091 JOY &amp; SNOOK RESTAURANT AND BAKERY  Brooklyn  NOSTRAND AVENUE 11216 Caribbean
+##    insp_date     action vio_code
+## 1 2019-11-04 violations      05H
+## 2 2019-08-29 violations      08A
+## 3 2016-07-22 violations      10I
+## 4 2019-08-30 violations      04F
+## 5 2018-12-10 violations      06D
+## 6 2017-10-03 violations      22F
+##                                                                                                                                         vio_desc
+## 1                                                                 No facilities available to wash, rinse and sanitize utensils and/or equipment.
+## 2             Facility not vermin proof. Harborage or conditions conducive to attracting vermin to the premises and/or allowing vermin to exist.
+## 3                                                              Single service item reused, improperly stored, dispensed; not used when required.
+## 4                     Food, food preparation area, food storage area, area used by employees or patrons, contaminated by sewage or liquid waste.
+## 5 Food contact surface not properly washed, rinsed and sanitized after each use and following any activity when contamination may have occurred.
+## 6                                                                                                                        MISBRANDED AND LABELING
+##           flag score grade        insp_prog          insp_type latitude longitude
+## 1     Critical    37  &lt;NA&gt; Cycle Inspection Initial Inspection 40.76848 -73.91123
+## 2 Not Critical     9     A Cycle Inspection      Re-inspection 40.63386 -74.02680
+## 3 Not Critical     9     A Cycle Inspection Initial Inspection 40.76636 -73.96250
+## 4     Critical    13     A Cycle Inspection      Re-inspection 40.72597 -73.94060
+## 5     Critical    28     C Cycle Inspection      Re-inspection 40.65439 -74.00434
+## 6 Not Critical    29  &lt;NA&gt; Cycle Inspection Initial Inspection 40.67266 -73.95025</code></pre>
 
+</div>
 </div>
             </section>
 
