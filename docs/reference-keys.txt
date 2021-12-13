@@ -4,5 +4,11 @@ data-transformation
 missing-values
 transformation
 results
+major-violations
+borough
+chain-vs-non-chain
+cuisine-category
+score-change-over-time
+after-covid-19
 interactive-component
 conclusion

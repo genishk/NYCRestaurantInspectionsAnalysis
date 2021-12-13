@@ -24,7 +24,7 @@
 <meta name="author" content="Vishweshwar Tyagi, SeokHyun Kim" />
 
 
-<meta name="date" content="2021-12-12" />
+<meta name="date" content="2021-12-13" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -86,7 +86,15 @@
 <ul>
 <li class="chapter" data-level="4.1" data-path="missing-values.html"><a href="missing-values.html#transformation"><i class="fa fa-check"></i><b>4.1</b> Transformation</a></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="results.html"><a href="results.html"><i class="fa fa-check"></i><b>5</b> Results</a></li>
+<li class="chapter" data-level="5" data-path="results.html"><a href="results.html"><i class="fa fa-check"></i><b>5</b> Results</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="results.html"><a href="results.html#major-violations"><i class="fa fa-check"></i><b>5.1</b> Major Violations</a></li>
+<li class="chapter" data-level="5.2" data-path="results.html"><a href="results.html#borough"><i class="fa fa-check"></i><b>5.2</b> Borough</a></li>
+<li class="chapter" data-level="5.3" data-path="results.html"><a href="results.html#chain-vs-non-chain"><i class="fa fa-check"></i><b>5.3</b> Chain vs Non-Chain</a></li>
+<li class="chapter" data-level="5.4" data-path="results.html"><a href="results.html#cuisine-category"><i class="fa fa-check"></i><b>5.4</b> Cuisine Category</a></li>
+<li class="chapter" data-level="5.5" data-path="results.html"><a href="results.html#score-change-over-time"><i class="fa fa-check"></i><b>5.5</b> Score Change over Time</a></li>
+<li class="chapter" data-level="5.6" data-path="results.html"><a href="results.html#after-covid-19"><i class="fa fa-check"></i><b>5.6</b> After COVID-19</a></li>
+</ul></li>
 <li class="chapter" data-level="6" data-path="interactive-component.html"><a href="interactive-component.html"><i class="fa fa-check"></i><b>6</b> Interactive component</a></li>
 <li class="chapter" data-level="7" data-path="conclusion.html"><a href="conclusion.html"><i class="fa fa-check"></i><b>7</b> Conclusion</a></li>
 <li class="divider"></li>
@@ -135,20 +143,20 @@
 <div id="transformation" class="section level2" number="4.1">
 <h2><span class="header-section-number">4.1</span> Transformation</h2>
 <p>We drop the rows that have 1900 as their inspection year</p>
-<pre><code>##      camis                               dba      boro           street   zip   cuisine
-## 1 41170643         LITTLE MOROCCO RESTAURANT    Queens  STEINWAY STREET 11103  Moroccan
-## 2 41610426              GLOW THAI RESTAURANT  Brooklyn         3 AVENUE 11209      Thai
-## 3 41711813                     BEDFORD FALLS Manhattan EAST   67 STREET 10065  American
-## 4 41429907                      MARIO&#39;S DELI  Brooklyn    NASSAU AVENUE 11222  American
-## 5 41624260                 ZENG&#39;S RESTAURANT  Brooklyn    FOURTH AVENUE 11232   Chinese
-## 6 41530091 JOY &amp; SNOOK RESTAURANT AND BAKERY  Brooklyn  NOSTRAND AVENUE 11216 Caribbean
-##    insp_date     action vio_code
-## 1 2019-11-04 violations      05H
-## 2 2019-08-29 violations      08A
-## 3 2016-07-22 violations      10I
-## 4 2019-08-30 violations      04F
-## 5 2018-12-10 violations      06D
-## 6 2017-10-03 violations      22F
+<pre><code>##      camis                               dba      boro           street
+## 1 41170643         LITTLE MOROCCO RESTAURANT    Queens  STEINWAY STREET
+## 2 41610426              GLOW THAI RESTAURANT  Brooklyn         3 AVENUE
+## 3 41711813                     BEDFORD FALLS Manhattan EAST   67 STREET
+## 4 41429907                      MARIO&#39;S DELI  Brooklyn    NASSAU AVENUE
+## 5 41624260                 ZENG&#39;S RESTAURANT  Brooklyn    FOURTH AVENUE
+## 6 41530091 JOY &amp; SNOOK RESTAURANT AND BAKERY  Brooklyn  NOSTRAND AVENUE
+##     zip   cuisine  insp_date     action vio_code
+## 1 11103  Moroccan 2019-11-04 violations      05H
+## 2 11209      Thai 2019-08-29 violations      08A
+## 3 10065  American 2016-07-22 violations      10I
+## 4 11222  American 2019-08-30 violations      04F
+## 5 11232   Chinese 2018-12-10 violations      06D
+## 6 11216 Caribbean 2017-10-03 violations      22F
 ##                                                                                                                                         vio_desc
 ## 1                                                                 No facilities available to wash, rinse and sanitize utensils and/or equipment.
 ## 2             Facility not vermin proof. Harborage or conditions conducive to attracting vermin to the premises and/or allowing vermin to exist.
@@ -156,13 +164,20 @@
 ## 4                     Food, food preparation area, food storage area, area used by employees or patrons, contaminated by sewage or liquid waste.
 ## 5 Food contact surface not properly washed, rinsed and sanitized after each use and following any activity when contamination may have occurred.
 ## 6                                                                                                                        MISBRANDED AND LABELING
-##           flag score grade        insp_prog          insp_type latitude longitude
-## 1     Critical    37  &lt;NA&gt; Cycle Inspection Initial Inspection 40.76848 -73.91123
-## 2 Not Critical     9     A Cycle Inspection      Re-inspection 40.63386 -74.02680
-## 3 Not Critical     9     A Cycle Inspection Initial Inspection 40.76636 -73.96250
-## 4     Critical    13     A Cycle Inspection      Re-inspection 40.72597 -73.94060
-## 5     Critical    28     C Cycle Inspection      Re-inspection 40.65439 -74.00434
-## 6 Not Critical    29  &lt;NA&gt; Cycle Inspection Initial Inspection 40.67266 -73.95025</code></pre>
+##           flag score grade        insp_prog          insp_type latitude
+## 1     Critical    37  &lt;NA&gt; Cycle Inspection Initial Inspection 40.76848
+## 2 Not Critical     9     A Cycle Inspection      Re-inspection 40.63386
+## 3 Not Critical     9     A Cycle Inspection Initial Inspection 40.76636
+## 4     Critical    13     A Cycle Inspection      Re-inspection 40.72597
+## 5     Critical    28     C Cycle Inspection      Re-inspection 40.65439
+## 6 Not Critical    29  &lt;NA&gt; Cycle Inspection Initial Inspection 40.67266
+##   longitude
+## 1 -73.91123
+## 2 -74.02680
+## 3 -73.96250
+## 4 -73.94060
+## 5 -74.00434
+## 6 -73.95025</code></pre>
 <p>Further, consider</p>
 <pre><code>##    insp_year      n
 ## 1       2009      1
@@ -177,20 +192,20 @@
 ## 10      2021  24635</code></pre>
 <p>We can see that there are very few observations from the years before 2016. In order to draw meaningful insights, we shall drop all rows with inspection year less than 2016 as we have very less data from this time period. Hence, we’ll analyse only the subset with inspection year from 2016 to 2021.</p>
 <p>Let us now save this dataset for further analysis</p>
-<pre><code>##      camis                               dba      boro           street   zip   cuisine
-## 1 41170643         LITTLE MOROCCO RESTAURANT    Queens  STEINWAY STREET 11103  Moroccan
-## 2 41610426              GLOW THAI RESTAURANT  Brooklyn         3 AVENUE 11209      Thai
-## 3 41711813                     BEDFORD FALLS Manhattan EAST   67 STREET 10065  American
-## 4 41429907                      MARIO&#39;S DELI  Brooklyn    NASSAU AVENUE 11222  American
-## 5 41624260                 ZENG&#39;S RESTAURANT  Brooklyn    FOURTH AVENUE 11232   Chinese
-## 6 41530091 JOY &amp; SNOOK RESTAURANT AND BAKERY  Brooklyn  NOSTRAND AVENUE 11216 Caribbean
-##    insp_date     action vio_code
-## 1 2019-11-04 violations      05H
-## 2 2019-08-29 violations      08A
-## 3 2016-07-22 violations      10I
-## 4 2019-08-30 violations      04F
-## 5 2018-12-10 violations      06D
-## 6 2017-10-03 violations      22F
+<pre><code>##      camis                               dba      boro           street
+## 1 41170643         LITTLE MOROCCO RESTAURANT    Queens  STEINWAY STREET
+## 2 41610426              GLOW THAI RESTAURANT  Brooklyn         3 AVENUE
+## 3 41711813                     BEDFORD FALLS Manhattan EAST   67 STREET
+## 4 41429907                      MARIO&#39;S DELI  Brooklyn    NASSAU AVENUE
+## 5 41624260                 ZENG&#39;S RESTAURANT  Brooklyn    FOURTH AVENUE
+## 6 41530091 JOY &amp; SNOOK RESTAURANT AND BAKERY  Brooklyn  NOSTRAND AVENUE
+##     zip   cuisine  insp_date     action vio_code
+## 1 11103  Moroccan 2019-11-04 violations      05H
+## 2 11209      Thai 2019-08-29 violations      08A
+## 3 10065  American 2016-07-22 violations      10I
+## 4 11222  American 2019-08-30 violations      04F
+## 5 11232   Chinese 2018-12-10 violations      06D
+## 6 11216 Caribbean 2017-10-03 violations      22F
 ##                                                                                                                                         vio_desc
 ## 1                                                                 No facilities available to wash, rinse and sanitize utensils and/or equipment.
 ## 2             Facility not vermin proof. Harborage or conditions conducive to attracting vermin to the premises and/or allowing vermin to exist.
@@ -198,13 +213,20 @@
 ## 4                     Food, food preparation area, food storage area, area used by employees or patrons, contaminated by sewage or liquid waste.
 ## 5 Food contact surface not properly washed, rinsed and sanitized after each use and following any activity when contamination may have occurred.
 ## 6                                                                                                                        MISBRANDED AND LABELING
-##           flag score grade        insp_prog          insp_type latitude longitude
-## 1     Critical    37  &lt;NA&gt; Cycle Inspection Initial Inspection 40.76848 -73.91123
-## 2 Not Critical     9     A Cycle Inspection      Re-inspection 40.63386 -74.02680
-## 3 Not Critical     9     A Cycle Inspection Initial Inspection 40.76636 -73.96250
-## 4     Critical    13     A Cycle Inspection      Re-inspection 40.72597 -73.94060
-## 5     Critical    28     C Cycle Inspection      Re-inspection 40.65439 -74.00434
-## 6 Not Critical    29  &lt;NA&gt; Cycle Inspection Initial Inspection 40.67266 -73.95025</code></pre>
+##           flag score grade        insp_prog          insp_type latitude
+## 1     Critical    37  &lt;NA&gt; Cycle Inspection Initial Inspection 40.76848
+## 2 Not Critical     9     A Cycle Inspection      Re-inspection 40.63386
+## 3 Not Critical     9     A Cycle Inspection Initial Inspection 40.76636
+## 4     Critical    13     A Cycle Inspection      Re-inspection 40.72597
+## 5     Critical    28     C Cycle Inspection      Re-inspection 40.65439
+## 6 Not Critical    29  &lt;NA&gt; Cycle Inspection Initial Inspection 40.67266
+##   longitude
+## 1 -73.91123
+## 2 -74.02680
+## 3 -73.96250
+## 4 -73.94060
+## 5 -74.00434
+## 6 -73.95025</code></pre>
 
 </div>
 </div>

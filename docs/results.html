@@ -24,7 +24,7 @@
 <meta name="author" content="Vishweshwar Tyagi, SeokHyun Kim" />
 
 
-<meta name="date" content="2021-12-12" />
+<meta name="date" content="2021-12-13" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -86,7 +86,15 @@
 <ul>
 <li class="chapter" data-level="4.1" data-path="missing-values.html"><a href="missing-values.html#transformation"><i class="fa fa-check"></i><b>4.1</b> Transformation</a></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="results.html"><a href="results.html"><i class="fa fa-check"></i><b>5</b> Results</a></li>
+<li class="chapter" data-level="5" data-path="results.html"><a href="results.html"><i class="fa fa-check"></i><b>5</b> Results</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="results.html"><a href="results.html#major-violations"><i class="fa fa-check"></i><b>5.1</b> Major Violations</a></li>
+<li class="chapter" data-level="5.2" data-path="results.html"><a href="results.html#borough"><i class="fa fa-check"></i><b>5.2</b> Borough</a></li>
+<li class="chapter" data-level="5.3" data-path="results.html"><a href="results.html#chain-vs-non-chain"><i class="fa fa-check"></i><b>5.3</b> Chain vs Non-Chain</a></li>
+<li class="chapter" data-level="5.4" data-path="results.html"><a href="results.html#cuisine-category"><i class="fa fa-check"></i><b>5.4</b> Cuisine Category</a></li>
+<li class="chapter" data-level="5.5" data-path="results.html"><a href="results.html#score-change-over-time"><i class="fa fa-check"></i><b>5.5</b> Score Change over Time</a></li>
+<li class="chapter" data-level="5.6" data-path="results.html"><a href="results.html#after-covid-19"><i class="fa fa-check"></i><b>5.6</b> After COVID-19</a></li>
+</ul></li>
 <li class="chapter" data-level="6" data-path="interactive-component.html"><a href="interactive-component.html"><i class="fa fa-check"></i><b>6</b> Interactive component</a></li>
 <li class="chapter" data-level="7" data-path="conclusion.html"><a href="conclusion.html"><i class="fa fa-check"></i><b>7</b> Conclusion</a></li>
 <li class="divider"></li>
@@ -110,18 +118,51 @@
             <section class="normal" id="section-">
 <div id="results" class="section level1" number="5">
 <h1><span class="header-section-number">Chapter 5</span> Results</h1>
+<p>After extracting and cleaning the dataset, finally we can start analyzing the New York City Restaurant Inspection result and help public make informed decisions! In this Results chapter, we will answer various questions about violation and safety of New York City Restaurants.</p>
+<div id="major-violations" class="section level2" number="5.1">
+<h2><span class="header-section-number">5.1</span> Major Violations</h2>
+<p>Firstly, we want to check out what are the most common violations committed. Let’s pick the major violations of restaurant in NYC.</p>
 <p><img src="finalproj_files/figure-html/unnamed-chunk-45-1.png" width="672" /></p>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-46-1.png" width="672" /></p>
+<div id="htmlwidget-ab7e6923cc73826a83e0" class="reactable html-widget" style="width:auto;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-ab7e6923cc73826a83e0">{"x":{"tag":{"name":"Reactable","attribs":{"data":{"Violation_Code":["04L","10B","06C","08A","06D","10F"],"Description":["Evidence of mice or live mice present in facility's food and/or non-food areas.","Plumbing not properly installed or maintained; anti-siphonage or backflow prevention device not provided where required; equipment or floor not properly drained; sewage disposal system in disrepair or not functioning properly.","Food not protected from potential source of contamination during storage, preparation, transportation, display or service.","Facility not vermin proof. Harborage or conditions conducive to attracting vermin to the premises and/or allowing vermin to exist.","Food contact surface not properly washed, rinsed and sanitized after each use and following any activity when contamination may have occurred.","Non-food contact surface improperly constructed. Unacceptable material used. Non-food contact surface or equipment improperly maintained and/or not properly sealed, raised, spaced or movable to allow accessibility for cleaning on all sides, above and underneath the unit."]},"columns":[{"accessor":"Violation_Code","name":"Violation_Code","type":"factor"},{"accessor":"Description","name":"Description","type":"factor"}],"defaultPageSize":10,"paginationType":"numbers","showPageInfo":true,"minRows":1,"dataKey":"49b9e821f847c08b1af75aa616d28a09","key":"49b9e821f847c08b1af75aa616d28a09"},"children":[]},"class":"reactR_markup"},"evals":[],"jsHooks":[]}</script>
+<p>According to the pie chart and description table above, we can check that the most common violation is code 10F, which indicates ‘Non-food contact surface improperly constructed. Unacceptable material used…’. It’s really dangerous from the first item. If you look at the 4th highest violation (code 6C), it’s surprising that the food and ingredients we eat in restaurants are often exposed to contamination. Also, there are many places where mice appear (code 04L). But don’t worry. Through the analysis, we will help you avoid these violated restaurants.</p>
+</div>
+<div id="borough" class="section level2" number="5.2">
+<h2><span class="header-section-number">5.2</span> Borough</h2>
+<p>We’ll firstly figure out which borough gets better grade in inspection.</p>
 <p><img src="finalproj_files/figure-html/unnamed-chunk-47-1.png" width="672" /></p>
+<p>Keep in mind that A is better grade than B, and B is better grade than C. N, P, Z mean not yet graded or grade pending issued. Look at the stacked bar-chart above. Though the proportion of each borough is not significantly different in grade A, B, C, but still, it can be seen that the proportion of Manhattan is highest in grade A. On the other hand, Brooklyn accounts for a high proportion in grade B or C. Therefore, if you are looking for an borough to eat, we recommend Manhattan!</p>
+<p>Then the next thing we are curious about is What are the locations in NYC that have a large number of critical violations? Even if the number of violations is the same, if the violation is serious, you will definitely want to avoid that area.</p>
 <p><img src="finalproj_files/figure-html/unnamed-chunk-48-1.png" width="672" /></p>
+<p>New York City’s inspection report provides information on whether the violation was serious or not, and I was able to create the graph above through this info. But the rate of critical violations does not seem to vary significantly from borough to borough. Fortunately, you don’t have to consider this part much when choosing restaurant.</p>
+</div>
+<div id="chain-vs-non-chain" class="section level2" number="5.3">
+<h2><span class="header-section-number">5.3</span> Chain vs Non-Chain</h2>
+<p>Let’s solve other interesting question this time. Which one do you think is safer, a chain restaurant or a non-chain restaurant?</p>
 <p><img src="finalproj_files/figure-html/unnamed-chunk-49-1.png" width="672" /></p>
-<div id="htmlwidget-0ae373169e80a5461c0c" class="reactable html-widget" style="width:auto;height:auto;"></div>
-<script type="application/json" data-for="htmlwidget-0ae373169e80a5461c0c">{"x":{"tag":{"name":"Reactable","attribs":{"data":{"Violation_Code":["06D","10F","10B","06C","04L","08A"],"Description":["Food contact surface not properly washed, rinsed and sanitized after each use and following any activity when contamination may have occurred.","Non-food contact surface improperly constructed. Unacceptable material used. Non-food contact surface or equipment improperly maintained and/or not properly sealed, raised, spaced or movable to allow accessibility for cleaning on all sides, above and underneath the unit.","Plumbing not properly installed or maintained; anti-siphonage or backflow prevention device not provided where required; equipment or floor not properly drained; sewage disposal system in disrepair or not functioning properly.","Food not protected from potential source of contamination during storage, preparation, transportation, display or service.","Evidence of mice or live mice present in facility's food and/or non-food areas.","Facility not vermin proof. Harborage or conditions conducive to attracting vermin to the premises and/or allowing vermin to exist."]},"columns":[{"accessor":"Violation_Code","name":"Violation_Code","type":"factor"},{"accessor":"Description","name":"Description","type":"factor"}],"defaultPageSize":10,"paginationType":"numbers","showPageInfo":true,"minRows":1,"dataKey":"bf60ffd94efc569a0a853cd6320d251c","key":"bf60ffd94efc569a0a853cd6320d251c"},"children":[]},"class":"reactR_markup"},"evals":[],"jsHooks":[]}</script>
+<p>The results were somewhat surprising. Before checking the box plot, note that the higher the violation score is, the more serious the violation is. So the higher violation score means that restaurant is less safe. As a result, non-chain restaurants tended to have higher violation score than chain restaurants in all regions! Presumably, chain restaurants with integrated management pay a bit more attention to hygiene or storage of food. If you want to have a hygienic meal in New York City, you are more likely to have what you want to by going to a chain restaurant.</p>
+</div>
+<div id="cuisine-category" class="section level2" number="5.4">
+<h2><span class="header-section-number">5.4</span> Cuisine Category</h2>
+<p>If so, how about the category of cuisine? Will the violation score differ depending on the type of restaurant?</p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-50-1.png" width="672" /></p>
+<p>We can easily check this out through the Cleveland Dot Plot. To avoid errors due to a small number of samples, only categories with more than 100 samples were selected. A distinct difference is observed than expected. Because each category of cuisine has a different way of cooking and handling ingredients, there must be restaurants that are exposed to environments that are prone to violation. The graph above clearly shows that.</p>
+</div>
+<div id="score-change-over-time" class="section level2" number="5.5">
+<h2><span class="header-section-number">5.5</span> Score Change over Time</h2>
+<p>Now, let’s take a look at how the violation score of restaurants changes over time.</p>
 <p><img src="finalproj_files/figure-html/unnamed-chunk-51-1.png" width="672" /></p>
-<div id="htmlwidget-85f47294a1485ff5e5b0" class="reactable html-widget" style="width:auto;height:auto;"></div>
-<script type="application/json" data-for="htmlwidget-85f47294a1485ff5e5b0">{"x":{"tag":{"name":"Reactable","attribs":{"data":{"Violation_Code":["04L","10B","06C","08A","06D","10F"],"Description":["Evidence of mice or live mice present in facility's food and/or non-food areas.","Plumbing not properly installed or maintained; anti-siphonage or backflow prevention device not provided where required; equipment or floor not properly drained; sewage disposal system in disrepair or not functioning properly.","Food not protected from potential source of contamination during storage, preparation, transportation, display or service.","Facility not vermin proof. Harborage or conditions conducive to attracting vermin to the premises and/or allowing vermin to exist.","Food contact surface not properly washed, rinsed and sanitized after each use and following any activity when contamination may have occurred.","Non-food contact surface improperly constructed. Unacceptable material used. Non-food contact surface or equipment improperly maintained and/or not properly sealed, raised, spaced or movable to allow accessibility for cleaning on all sides, above and underneath the unit."]},"columns":[{"accessor":"Violation_Code","name":"Violation_Code","type":"factor"},{"accessor":"Description","name":"Description","type":"factor"}],"defaultPageSize":10,"paginationType":"numbers","showPageInfo":true,"minRows":1,"dataKey":"49b9e821f847c08b1af75aa616d28a09","key":"49b9e821f847c08b1af75aa616d28a09"},"children":[]},"class":"reactR_markup"},"evals":[],"jsHooks":[]}</script>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-53-1.png" width="672" /></p>
+<p>A few interesting things can be noticed in the graph. Note that one line in the graph represents the score change of one restaurant over time. First of all, it can be ascertained that serious violations are immediately remedied. In the graph, the violations over score 40 are improved right after the inspection. In addition, when looking at the overall trend of lower scores, it is estimated that restaurants are making some effort to improve safety.</p>
+</div>
+<div id="after-covid-19" class="section level2" number="5.6">
+<h2><span class="header-section-number">5.6</span> After COVID-19</h2>
+<p>Lastly, we cannot leave out the analysis about COVID-19. Which violation increases after COVID-19 do you think?</p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-52-1.png" width="672" /></p>
+<div id="htmlwidget-3d779004bf8680ca9e1c" class="reactable html-widget" style="width:auto;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-3d779004bf8680ca9e1c">{"x":{"tag":{"name":"Reactable","attribs":{"data":{"Violation_Code":["06D","10F","10B","06C","04L","08A"],"Description":["Food contact surface not properly washed, rinsed and sanitized after each use and following any activity when contamination may have occurred.","Non-food contact surface improperly constructed. Unacceptable material used. Non-food contact surface or equipment improperly maintained and/or not properly sealed, raised, spaced or movable to allow accessibility for cleaning on all sides, above and underneath the unit.","Plumbing not properly installed or maintained; anti-siphonage or backflow prevention device not provided where required; equipment or floor not properly drained; sewage disposal system in disrepair or not functioning properly.","Food not protected from potential source of contamination during storage, preparation, transportation, display or service.","Evidence of mice or live mice present in facility's food and/or non-food areas.","Facility not vermin proof. Harborage or conditions conducive to attracting vermin to the premises and/or allowing vermin to exist."]},"columns":[{"accessor":"Violation_Code","name":"Violation_Code","type":"factor"},{"accessor":"Description","name":"Description","type":"factor"}],"defaultPageSize":10,"paginationType":"numbers","showPageInfo":true,"minRows":1,"dataKey":"bf60ffd94efc569a0a853cd6320d251c","key":"bf60ffd94efc569a0a853cd6320d251c"},"children":[]},"class":"reactR_markup"},"evals":[],"jsHooks":[]}</script>
+<p>It seems that there is a period between 2020-2021 where the inspection was not conducted due to the corona virus. To see what kinds of violations increased when the inspection was resumed, a trend line was drawn on the scatter plot above. The clearly increasing violation item is code 08A which indicates ‘Facility not vermin proof. Harborage or conditions conducive to attracting vermin to the premises and/or allowing vermin to exist.’ according to the description table. Due to the long shutdown period, the facilities that prevent vermin are not being managed well.</p>
 
+</div>
 </div>
             </section>
 
