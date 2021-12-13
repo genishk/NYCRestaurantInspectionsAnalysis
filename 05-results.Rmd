@@ -8,6 +8,8 @@ library(tidyr)
 library(patchwork)
 library(reactable)
 library(viridis)
+library(lubridate)
+library(ggalluvial)
 ```
 
 ```{r, echo=FALSE, include=FALSE}
@@ -235,6 +237,45 @@ ggplot(df_plot4, aes(x = Mean, y = reorder(cuisine, Mean))) +
 ```
 
 We can easily check this out through the Cleveland Dot Plot. To avoid errors due to a small number of samples, only categories with more than 100 samples were selected. A distinct difference is observed than expected. Because each category of cuisine has a different way of cooking and handling ingredients, there must be restaurants that are exposed to environments that are prone to violation. The graph above clearly shows that.
+
+If then, we also want to know that the proportion of cuisine in each grade affected by borough. We will create a mosaic plot (which is basically a faceted stacked bar chart) showing all three variables.
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+
+df_plot8 <- df_recent %>% drop_na(grade)
+df_plot8 <- subset(df_plot8,!(grade %in% c('G')))
+df_plot8 <- na.omit(df_plot8)
+df_plot8$grade <- factor(df_plot8$grade)
+df_plot8$boro <- factor(df_plot8$boro)
+
+df_plot8 <- subset(df_plot8, select=c('boro','cuisine','flag','grade'))
+
+temp <- df_plot8 %>% group_by(cuisine) %>% summarize(count=n())
+df_plot8 <- subset(df_plot8, cuisine %in% temp[order(-temp$count),][0:5,]$cuisine)
+
+df_plot8 <- df_plot8 %>% 
+  group_by(boro, cuisine, grade) %>% 
+  summarize(n = n())
+
+temp2 <- df_plot8 %>% 
+  group_by(boro, grade) %>% 
+  summarize(total = sum(n))
+
+df_plot8 <- merge(df_plot8, temp2, by = c('boro','grade'))
+df_plot8$prop <- df_plot8$n/df_plot8$total
+
+df_plot8 %>% 
+  ggplot(aes(x = grade, y = prop, fill = cuisine)) +
+  geom_col() +
+  facet_wrap(~boro) +
+  ggtitle("Cuisine by Grade", sub = "faceted on Borough") +
+  theme_classic() +
+  scale_fill_manual(values = RColorBrewer::brewer.pal(5, "Oranges")) +
+  labs(x = "Grade", y= "Proportion",fill="Cuisine (Top 5)") 
+
+```
+
+We chose top 5 category of cuisine to secure enough sample size. Clearly, you can see that the proportion of cuisine in each grade varies for each borough. Especially, if you want to eat chinese, I recommend not to eat in Bronx borough because a lot portion of grade C Chinese restaurant is there!
 
 ## Score Change over Time
 

@@ -213,27 +213,13 @@
 ## 6 40.66778 -73.94236</code></pre>
 <p>Let us rename each column to its shorter version for easier access</p>
 <p>We will separate out inspection type into two columns denoting inspection program and inspection type</p>
-<pre><code>##      camis                      dba      boro             street   zip
-## 1 41393637       DELICIAS MEXICANAS Manhattan           3 AVENUE 10029
-## 2 50013433                BALVANERA Manhattan     STANTON STREET 10002
-## 3 50008129   COCO FRESH TEA &amp; JUICE    Queens           BROADWAY 11373
-## 4 50100295      EL BURRITO NACHO II  Brooklyn    FLUSHING AVENUE 11206
-## 5 41696471 MAISON HARLEM RESTAURANT Manhattan ST NICHOLAS AVENUE 10027
-## 6 50098871            NORIBAR SUSHI  Brooklyn    KINGSTON AVENUE 11213
-##         cuisine  insp.date                                          action
-## 1       Mexican 03/17/2017 Violations were cited in the following area(s).
-## 2       Spanish 05/21/2019 Violations were cited in the following area(s).
-## 3    Coffee/Tea 10/15/2018 Violations were cited in the following area(s).
-## 4       Mexican 02/21/2020 Violations were cited in the following area(s).
-## 5        French 01/28/2020 Violations were cited in the following area(s).
-## 6 Jewish/Kosher 08/30/2021 Violations were cited in the following area(s).
-##   vio.code
-## 1      10D
-## 2      10D
-## 3      10H
-## 4      02G
-## 5      06D
-## 6      10F
+<pre><code>##      camis                      dba      boro             street   zip       cuisine  insp.date                                          action vio.code
+## 1 41393637       DELICIAS MEXICANAS Manhattan           3 AVENUE 10029       Mexican 03/17/2017 Violations were cited in the following area(s).      10D
+## 2 50013433                BALVANERA Manhattan     STANTON STREET 10002       Spanish 05/21/2019 Violations were cited in the following area(s).      10D
+## 3 50008129   COCO FRESH TEA &amp; JUICE    Queens           BROADWAY 11373    Coffee/Tea 10/15/2018 Violations were cited in the following area(s).      10H
+## 4 50100295      EL BURRITO NACHO II  Brooklyn    FLUSHING AVENUE 11206       Mexican 02/21/2020 Violations were cited in the following area(s).      02G
+## 5 41696471 MAISON HARLEM RESTAURANT Manhattan ST NICHOLAS AVENUE 10027        French 01/28/2020 Violations were cited in the following area(s).      06D
+## 6 50098871            NORIBAR SUSHI  Brooklyn    KINGSTON AVENUE 11213 Jewish/Kosher 08/30/2021 Violations were cited in the following area(s).      10F
 ##                                                                                                                                                                                                                                                                          vio.desc
 ## 1                                                                      Mechanical or natural ventilation system not provided,  improperly installed, in disrepair and/or fails to prevent excessive build-up of grease, heat, steam condensation vapors, odors, smoke, and fumes.
 ## 2                                                                      Mechanical or natural ventilation system not provided,  improperly installed, in disrepair and/or fails to prevent excessive build-up of grease, heat, steam condensation vapors, odors, smoke, and fumes.
@@ -241,45 +227,30 @@
 ## 4                                                                                                                                              Cold food item held above 41쨘 F (smoked fish and reduced oxygen packaged foods above 38 쨘F) except during necessary preparation.
 ## 5                                                                                                                                  Food contact surface not properly washed, rinsed and sanitized after each use and following any activity when contamination may have occurred.
 ## 6 Non-food contact surface improperly constructed. Unacceptable material used. Non-food contact surface or equipment improperly maintained and/or not properly sealed, raised, spaced or movable to allow accessibility for cleaning on all sides, above and underneath the unit.
-##           flag score grade                insp.prog          insp.type
-## 1 Not Critical    11     A         Cycle Inspection Initial Inspection
-## 2 Not Critical    29  &lt;NA&gt;         Cycle Inspection Initial Inspection
-## 3 Not Critical    22  &lt;NA&gt;         Cycle Inspection Initial Inspection
-## 4     Critical    11     A Pre-permit (Operational)      Re-inspection
-## 5     Critical    32  &lt;NA&gt;         Cycle Inspection Initial Inspection
-## 6 Not Critical    18  &lt;NA&gt;         Cycle Inspection Initial Inspection
-##   latitude longitude
-## 1 40.79753 -73.94031
-## 2 40.72053 -73.98544
-## 3 40.73740 -73.87729
-## 4 40.70062 -73.94281
-## 5 40.81208 -73.95144
-## 6 40.66778 -73.94236</code></pre>
+##           flag score grade                insp.prog          insp.type latitude longitude
+## 1 Not Critical    11     A         Cycle Inspection Initial Inspection 40.79753 -73.94031
+## 2 Not Critical    29  &lt;NA&gt;         Cycle Inspection Initial Inspection 40.72053 -73.98544
+## 3 Not Critical    22  &lt;NA&gt;         Cycle Inspection Initial Inspection 40.73740 -73.87729
+## 4     Critical    11     A Pre-permit (Operational)      Re-inspection 40.70062 -73.94281
+## 5     Critical    32  &lt;NA&gt;         Cycle Inspection Initial Inspection 40.81208 -73.95144
+## 6 Not Critical    18  &lt;NA&gt;         Cycle Inspection Initial Inspection 40.66778 -73.94236</code></pre>
 <p>Consider the unique values in borough</p>
 <pre><code>## 
-##             0           210         Bronx      Brooklyn     Manhattan 
-##           118             2         35564         97059        149598 
-##        Queens Staten Island 
-##         88597         12261</code></pre>
+##             0           210         Bronx      Brooklyn     Manhattan        Queens Staten Island 
+##           118             2         35564         97059        149598         88597         12261</code></pre>
 <p>‘0’ borough is vague, we’ll drop these rows:</p>
 <pre><code>## [1] &quot;There are 118 rows with 0 as the borough&quot;</code></pre>
 <p>Consider the unique values in grade column:</p>
 <pre><code>## 
-## 01/03/2019 01/03/2020          A          B          C          G          N 
-##          1          1     152011      23514       9222          1       4889 
-##          P          Z 
-##       2487       1324</code></pre>
+## 01/03/2019 01/03/2020          A          B          C          G          N          P          Z 
+##          1          1     152011      23514       9222          1       4889       2487       1324</code></pre>
 <p>As per the data dictionary, grade value ‘G’ is not defined. Since only one row contains this, we can get rid of this row.</p>
-<pre><code>##       camis         dba        boro      street         zip     cuisine 
-##   &quot;integer&quot; &quot;character&quot; &quot;character&quot; &quot;character&quot; &quot;character&quot; &quot;character&quot; 
-##   insp.date      action    vio.code    vio.desc        flag       score 
-## &quot;character&quot; &quot;character&quot; &quot;character&quot; &quot;character&quot; &quot;character&quot; &quot;character&quot; 
+<pre><code>##       camis         dba        boro      street         zip     cuisine   insp.date      action    vio.code    vio.desc        flag       score 
+##   &quot;integer&quot; &quot;character&quot; &quot;character&quot; &quot;character&quot; &quot;character&quot; &quot;character&quot; &quot;character&quot; &quot;character&quot; &quot;character&quot; &quot;character&quot; &quot;character&quot; &quot;character&quot; 
 ##       grade   insp.prog   insp.type    latitude   longitude 
 ## &quot;character&quot; &quot;character&quot; &quot;character&quot;   &quot;numeric&quot;   &quot;numeric&quot;</code></pre>
-<pre><code>##       camis         dba        boro      street         zip     cuisine 
-##    &quot;factor&quot;    &quot;factor&quot;    &quot;factor&quot; &quot;character&quot;    &quot;factor&quot;    &quot;factor&quot; 
-##   insp.date      action    vio.code    vio.desc        flag       score 
-##      &quot;Date&quot;    &quot;factor&quot;    &quot;factor&quot;    &quot;factor&quot;    &quot;factor&quot; &quot;character&quot; 
+<pre><code>##       camis         dba        boro      street         zip     cuisine   insp.date      action    vio.code    vio.desc        flag       score 
+##    &quot;factor&quot;    &quot;factor&quot;    &quot;factor&quot; &quot;character&quot;    &quot;factor&quot;    &quot;factor&quot;      &quot;Date&quot;    &quot;factor&quot;    &quot;factor&quot;    &quot;factor&quot;    &quot;factor&quot; &quot;character&quot; 
 ##       grade   insp.prog   insp.type    latitude   longitude 
 ##    &quot;factor&quot;    &quot;factor&quot;    &quot;factor&quot;   &quot;numeric&quot;   &quot;numeric&quot;</code></pre>
 <p>We will now drop the duplicate rows</p>
