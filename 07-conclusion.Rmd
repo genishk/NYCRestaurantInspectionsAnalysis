@@ -1,2 +1,12 @@
 # Conclusion
 
+After whole long trip for exploratory data visualization, we finally got few useful insights. We found out which location in NYC to avoid when eat specific category of cuisine and figured out who is the frequent offender. In addition, as I promised in introduction chapter, we could derive the safest place. It is Manhattan and here's why.
+
+* Most number of inspections is conducted in Manhattan while it is the smallest in area.
+* The proportion of Manhattan is highest in grade A.
+
+But still, we noticed some limitations while analyzing. Firstly, records are also included for each restaurant that has applied for a permit but has not yet been inspected. Also, because this dataset is compiled from several large administrative data systems, it contains some illogical values that could be a result of missing.
+
+For the further research, we will use modeling to understand clusters of unsafe places and apply more NLP techniques to figure out the pattern of violation codes that occur together.
+
+Remember that you are living in the city of wonderful restaurants and hope this analysis help you eat a little more safely!
