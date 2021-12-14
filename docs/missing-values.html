@@ -59,6 +59,9 @@
 <script src="libs/reactwidget-1.0.0/react-tools.js"></script>
 <script src="libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
 <script src="libs/reactable-binding-0.2.3/reactable.js"></script>
+<link href="libs/parallel-coordinates-2.1.8/parcoords.css" rel="stylesheet" />
+<script src="libs/parcoords-binding-1.0.0/parcoords.js"></script>
+<script src="libs/d3-5.16.0/d3.min.js"></script>
 
 
 
@@ -100,6 +103,14 @@
 <li class="chapter" data-level="5.4" data-path="results.html"><a href="results.html#cuisine-category"><i class="fa fa-check"></i><b>5.4</b> Cuisine Category</a></li>
 <li class="chapter" data-level="5.5" data-path="results.html"><a href="results.html#score-change-over-time"><i class="fa fa-check"></i><b>5.5</b> Score Change over Time</a></li>
 <li class="chapter" data-level="5.6" data-path="results.html"><a href="results.html#after-covid-19"><i class="fa fa-check"></i><b>5.6</b> After COVID-19</a></li>
+<li class="chapter" data-level="5.7" data-path="results.html"><a href="results.html#total-inspections-in-new-york-city"><i class="fa fa-check"></i><b>5.7</b> Total Inspections in New York City</a></li>
+<li class="chapter" data-level="5.8" data-path="results.html"><a href="results.html#consistency-of-inspections"><i class="fa fa-check"></i><b>5.8</b> Consistency of Inspections</a></li>
+<li class="chapter" data-level="5.9" data-path="results.html"><a href="results.html#inspections-in-new-york-city---borough-level"><i class="fa fa-check"></i><b>5.9</b> Inspections in New York City - Borough Level</a></li>
+<li class="chapter" data-level="5.10" data-path="results.html"><a href="results.html#frequent-violations"><i class="fa fa-check"></i><b>5.10</b> Frequent Violations</a></li>
+<li class="chapter" data-level="5.11" data-path="results.html"><a href="results.html#borough---grade---flag---three-way-analysis"><i class="fa fa-check"></i><b>5.11</b> Borough - Grade - Flag - Three Way Analysis</a></li>
+<li class="chapter" data-level="5.12" data-path="results.html"><a href="results.html#relationship-between-score-and-grade"><i class="fa fa-check"></i><b>5.12</b> Relationship Between Score and Grade</a></li>
+<li class="chapter" data-level="5.13" data-path="results.html"><a href="results.html#frequent-offenders---by-critical-violations"><i class="fa fa-check"></i><b>5.13</b> Frequent Offenders - By Critical Violations</a></li>
+<li class="chapter" data-level="5.14" data-path="results.html"><a href="results.html#favourite-cuisine"><i class="fa fa-check"></i><b>5.14</b> Favourite Cuisine</a></li>
 </ul></li>
 <li class="chapter" data-level="6" data-path="interactive-component.html"><a href="interactive-component.html"><i class="fa fa-check"></i><b>6</b> Interactive component</a></li>
 <li class="chapter" data-level="7" data-path="conclusion.html"><a href="conclusion.html"><i class="fa fa-check"></i><b>7</b> Conclusion</a></li>
@@ -125,37 +136,44 @@
 <div id="missing-values" class="section level1" number="4">
 <h1><span class="header-section-number">Chapter 4</span> Missing values</h1>
 <p>Let us analyze the missing patterns in our data frame</p>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-32-1.png" width="1152" /><img src="finalproj_files/figure-html/unnamed-chunk-32-2.png" width="1152" /></p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-28-1.png" width="1152" /><img src="finalproj_files/figure-html/unnamed-chunk-28-2.png" width="1152" /></p>
 <p>According to the output of plot_missing function, we can confirm that there are a total of 29 missing patterns in our dataset. But if we look at plots in detail, the most common pattern is the one that has no missing values, followed by the pattern with missing values only in the ‘grade’ column. These two cases account for almost all of the most frequent missing patterns. We can also infer from the upper side plot that ‘grade’ has about 50% of its missing values and all other columns have relatively much fewer proportions of missing values.</p>
 <p>Since there are so many rows with missing values in ‘grade’, dropping these rows would not make sense. Instead, we will try to impute the ‘grade’ column values by finding exciting patterns in the dataset in further exploration.</p>
 <p>Let us now try to see how many rows have a given number of missing values.
-<img src="finalproj_files/figure-html/unnamed-chunk-33-1.png" width="1152" /></p>
+<img src="finalproj_files/figure-html/unnamed-chunk-29-1.png" width="1152" /></p>
 <p>We can see that most of the rows in our dataset either have no missing values or have exactly one missing value. The reason for this is evident from the missing-patterns plot we showed above; since the column ‘grade’ has so many missing values. This will be fixed when we impute the values for ‘grade’. We will consider dropping rows with more than five missing values; this is reasonable as these rows are relatively less in quantity.</p>
 <p>To better understand the pattern of missing values, we have to check for any placeholders for missing values. A nice strategy for this is to look for outliers.</p>
 <p>Let us try to see when most of the inspections were conducted.</p>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-34-1.png" width="1152" /></p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-30-1.png" width="1152" /></p>
 <p>Here, we can see that the inspection date with year = 1900 is an outlier and possibly a placeholder for missing values. We confirm below by analyzing the missing patterns of the subset of our dataset with the inspection year 1900.</p>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-35-1.png" width="1152" /></p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-31-1.png" width="1152" /></p>
 <p>We can see that most of the data in rows with the inspection year equal to 1900 is missing. Therefore, we will consider dropping these rows.</p>
 <p>Let us try to understand if there’s any relation between missing-patterns and borough.</p>
 <pre><code>## [1] Queens        Brooklyn      Manhattan     Bronx         Staten Island
 ## Levels: Bronx Brooklyn Manhattan Queens Staten Island</code></pre>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-37-1.png" width="672" /></p>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-38-1.png" width="1152" /></p>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-39-1.png" width="1152" /></p>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-40-1.png" width="1152" /></p>
-<p><img src="finalproj_files/figure-html/unnamed-chunk-41-1.png" width="1152" /></p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-33-1.png" width="672" /></p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-34-1.png" width="1152" /></p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-35-1.png" width="1152" /></p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-36-1.png" width="1152" /></p>
+<p><img src="finalproj_files/figure-html/unnamed-chunk-37-1.png" width="1152" /></p>
 <p>We can see that none of these seem to display any relation between missing-patterns and boroughs, which is worth investigating further.</p>
 <div id="transformation" class="section level2" number="4.1">
 <h2><span class="header-section-number">4.1</span> Transformation</h2>
 <p>We drop the rows that have 1900 as their inspection year</p>
-<pre><code>##      camis                               dba      boro           street   zip   cuisine  insp_date     action vio_code
-## 1 41170643         LITTLE MOROCCO RESTAURANT    Queens  STEINWAY STREET 11103  Moroccan 2019-11-04 violations      05H
-## 2 41610426              GLOW THAI RESTAURANT  Brooklyn         3 AVENUE 11209      Thai 2019-08-29 violations      08A
-## 3 41711813                     BEDFORD FALLS Manhattan EAST   67 STREET 10065  American 2016-07-22 violations      10I
-## 4 41429907                      MARIO&#39;S DELI  Brooklyn    NASSAU AVENUE 11222  American 2019-08-30 violations      04F
-## 5 41624260                 ZENG&#39;S RESTAURANT  Brooklyn    FOURTH AVENUE 11232   Chinese 2018-12-10 violations      06D
-## 6 41530091 JOY &amp; SNOOK RESTAURANT AND BAKERY  Brooklyn  NOSTRAND AVENUE 11216 Caribbean 2017-10-03 violations      22F
+<pre><code>##      camis                               dba      boro           street   zip   cuisine
+## 1 41170643         LITTLE MOROCCO RESTAURANT    Queens  STEINWAY STREET 11103  Moroccan
+## 2 41610426              GLOW THAI RESTAURANT  Brooklyn         3 AVENUE 11209      Thai
+## 3 41711813                     BEDFORD FALLS Manhattan EAST   67 STREET 10065  American
+## 4 41429907                      MARIO&#39;S DELI  Brooklyn    NASSAU AVENUE 11222  American
+## 5 41624260                 ZENG&#39;S RESTAURANT  Brooklyn    FOURTH AVENUE 11232   Chinese
+## 6 41530091 JOY &amp; SNOOK RESTAURANT AND BAKERY  Brooklyn  NOSTRAND AVENUE 11216 Caribbean
+##    insp_date     action vio_code
+## 1 2019-11-04 violations      05H
+## 2 2019-08-29 violations      08A
+## 3 2016-07-22 violations      10I
+## 4 2019-08-30 violations      04F
+## 5 2018-12-10 violations      06D
+## 6 2017-10-03 violations      22F
 ##                                                                                                                                         vio_desc
 ## 1                                                                 No facilities available to wash, rinse and sanitize utensils and/or equipment.
 ## 2             Facility not vermin proof. Harborage or conditions conducive to attracting vermin to the premises and/or allowing vermin to exist.
@@ -184,13 +202,20 @@
 ## 10      2021  24635</code></pre>
 <p>We can see that there are very few observations from the years before 2016. In order to draw meaningful insights, we shall drop all rows with inspection year less than 2016 as we have very less data from this time period. Hence, we’ll analyse only the subset with inspection year from 2016 to 2021.</p>
 <p>Let us now save this dataset for further analysis</p>
-<pre><code>##      camis                               dba      boro           street   zip   cuisine  insp_date     action vio_code
-## 1 41170643         LITTLE MOROCCO RESTAURANT    Queens  STEINWAY STREET 11103  Moroccan 2019-11-04 violations      05H
-## 2 41610426              GLOW THAI RESTAURANT  Brooklyn         3 AVENUE 11209      Thai 2019-08-29 violations      08A
-## 3 41711813                     BEDFORD FALLS Manhattan EAST   67 STREET 10065  American 2016-07-22 violations      10I
-## 4 41429907                      MARIO&#39;S DELI  Brooklyn    NASSAU AVENUE 11222  American 2019-08-30 violations      04F
-## 5 41624260                 ZENG&#39;S RESTAURANT  Brooklyn    FOURTH AVENUE 11232   Chinese 2018-12-10 violations      06D
-## 6 41530091 JOY &amp; SNOOK RESTAURANT AND BAKERY  Brooklyn  NOSTRAND AVENUE 11216 Caribbean 2017-10-03 violations      22F
+<pre><code>##      camis                               dba      boro           street   zip   cuisine
+## 1 41170643         LITTLE MOROCCO RESTAURANT    Queens  STEINWAY STREET 11103  Moroccan
+## 2 41610426              GLOW THAI RESTAURANT  Brooklyn         3 AVENUE 11209      Thai
+## 3 41711813                     BEDFORD FALLS Manhattan EAST   67 STREET 10065  American
+## 4 41429907                      MARIO&#39;S DELI  Brooklyn    NASSAU AVENUE 11222  American
+## 5 41624260                 ZENG&#39;S RESTAURANT  Brooklyn    FOURTH AVENUE 11232   Chinese
+## 6 41530091 JOY &amp; SNOOK RESTAURANT AND BAKERY  Brooklyn  NOSTRAND AVENUE 11216 Caribbean
+##    insp_date     action vio_code
+## 1 2019-11-04 violations      05H
+## 2 2019-08-29 violations      08A
+## 3 2016-07-22 violations      10I
+## 4 2019-08-30 violations      04F
+## 5 2018-12-10 violations      06D
+## 6 2017-10-03 violations      22F
 ##                                                                                                                                         vio_desc
 ## 1                                                                 No facilities available to wash, rinse and sanitize utensils and/or equipment.
 ## 2             Facility not vermin proof. Harborage or conditions conducive to attracting vermin to the premises and/or allowing vermin to exist.

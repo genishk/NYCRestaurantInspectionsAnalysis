@@ -14,5 +14,13 @@ chain-vs-non-chain
 cuisine-category
 score-change-over-time
 after-covid-19
+total-inspections-in-new-york-city
+consistency-of-inspections
+inspections-in-new-york-city---borough-level
+frequent-violations
+borough---grade---flag---three-way-analysis
+relationship-between-score-and-grade
+frequent-offenders---by-critical-violations
+favourite-cuisine
 interactive-component
 conclusion
