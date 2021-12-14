@@ -18,6 +18,7 @@ total-inspections-in-new-york-city
 consistency-of-inspections
 inspections-in-new-york-city---borough-level
 frequent-violations
+sentiment-analysis
 borough---grade---flag---three-way-analysis
 relationship-between-score-and-grade
 frequent-offenders---by-critical-violations

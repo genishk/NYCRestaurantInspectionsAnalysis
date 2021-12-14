@@ -327,7 +327,7 @@ A few interesting things can be noticed in the graph. Note that one line in the 
 
 ## After COVID-19
 
-Lastly, we cannot leave out the analysis about COVID-19. Which violation increases after COVID-19 do you think?
+we cannot leave out the analysis about COVID-19. Which violation increases after COVID-19 do you think?
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 
@@ -499,45 +499,45 @@ reactable(t[c('Violation Code', 'Violation')],  bordered = TRUE, highlight = TRU
 
 We can see that Brooklyn, Manhattan and Queens account for the majority of these violations and have roughly the same share. This makes sense because most of the inspections are also carried out in these boroughs. More number of violations in a borough need not necessarily mean the place is unsafe, instead, it means that regular checks are in place to ensure safety. We will confirm this below.
 
-<!-- ## Sentiment Analysis -->
+## Sentiment Analysis
 
-<!-- In order to understand the sentiment behind these violations, we analyse the word cloud for the most frequent words that occur in their violation description.  -->
+In order to understand the sentiment behind these violations, we analyse the word cloud for the most frequent words that occur in their violation description.
 
-<!-- ```{r, echo=FALSE, message=FALSE, warning=FALSE} -->
-<!-- t <- df -->
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+t <- df
 
-<!-- t <- t %>% -->
-<!--   count(vio_code, vio_desc, sort = TRUE) %>% -->
-<!--   slice(1:10) %>% -->
-<!--   select(vio_code, vio_desc) -->
+t <- t %>%
+  count(vio_code, vio_desc, sort = TRUE) %>%
+  slice(1:10) %>%
+  select(vio_code, vio_desc)
 
-<!-- t <- df[df$vio_code %in% unique(t$vio_code),] %>% -->
-<!--   select(vio_code, vio_desc) -->
+t <- df[df$vio_code %in% unique(t$vio_code),] %>%
+  select(vio_code, vio_desc)
 
-<!-- t$vio_desc <- as.character(t$vio_desc) -->
+t$vio_desc <- as.character(t$vio_desc)
 
-<!-- docs <- VCorpus(VectorSource(t$vio_desc)) %>% -->
-<!--   tm_map(tolower) %>% -->
-<!--   tm_map(removeWords, stopwords("english")) %>% -->
-<!--   tm_map(removePunctuation) %>% -->
-<!--   tm_map(PlainTextDocument) %>% -->
-<!--   tm_map(removeNumbers) %>% -->
-<!--   tm_map(stripWhitespace) -->
+docs <- VCorpus(VectorSource(t$vio_desc)) %>%
+  tm_map(tolower) %>%
+  tm_map(removeWords, stopwords("english")) %>%
+  tm_map(removePunctuation) %>%
+  tm_map(PlainTextDocument) %>%
+  tm_map(removeNumbers) %>%
+  tm_map(stripWhitespace)
 
-<!-- dtm <- TermDocumentMatrix(docs) -->
-<!-- m <- as.matrix(dtm) -->
-<!-- v <- sort(rowSums(m),decreasing=TRUE) -->
-<!-- d <- data.frame(word = names(v),freq=v) -->
-<!-- ``` -->
+dtm <- TermDocumentMatrix(docs)
+m <- as.matrix(dtm)
+v <- sort(rowSums(m),decreasing=TRUE)
+d <- data.frame(word = names(v),freq=v)
+```
 
-<!-- ```{r} -->
-<!-- set.seed(1234) -->
-<!-- wordcloud(words = d$word, freq = d$freq, min.freq=200, -->
-<!--         max.words=70, random.order=FALSE, rot.per=0.5, -->
-<!--         colors=brewer.pal(8, "Dark2")) -->
-<!-- ``` -->
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+set.seed(1234)
+wordcloud(words = d$word, freq = d$freq, min.freq=200,
+        max.words=70, random.order=FALSE, rot.per=0.5,
+        colors=brewer.pal(8, "Dark2"))
+```
 
-<!-- We can see that the sentiment displayed by these violation codes is mostly against the hygiene and safety standards of the restaurants. -->
+We can see that the sentiment displayed by these violation codes is mostly against the hygiene and safety standards of the restaurants.
 
 ## Borough - Grade - Flag - Three Way Analysis
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
