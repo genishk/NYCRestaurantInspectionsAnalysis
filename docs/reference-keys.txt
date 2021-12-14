@@ -8,12 +8,6 @@ data-transformation
 missing-values
 transformation
 results
-major-violations
-borough
-chain-vs-non-chain
-cuisine-category
-score-change-over-time
-after-covid-19
 total-inspections-in-new-york-city
 consistency-of-inspections
 inspections-in-new-york-city---borough-level
@@ -21,7 +15,10 @@ frequent-violations
 sentiment-analysis
 borough---grade---flag---three-way-analysis
 relationship-between-score-and-grade
+chain-vs-non-chain
 frequent-offenders---by-critical-violations
 favourite-cuisine
+score-change-over-time
+after-covid-19
 interactive-component
 conclusion

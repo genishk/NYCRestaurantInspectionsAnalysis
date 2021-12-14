@@ -1,26 +1,16 @@
 # Results
 
 ```{r, echo=FALSE}
-library(ggplot2)
-library(tidyverse)
-library(dplyr)
-library(tidyr)
-library(patchwork)
-library(reactable)
-library(viridis)
-library(lubridate)
-library(ggalluvial)
-library(reticulate)
 library(tidyverse)
 library(vcd)
 library(reactable)
 library(ggplot2)
 library(ggpubr)
-theme_set(theme_pubr())
+# theme_set(theme_pubr())
 library(ggplot2)
 library(tidyverse)
 library(dplyr, warn.conflicts = FALSE)
-options(dplyr.summarise.inform = FALSE)
+# options(dplyr.summarise.inform = FALSE)
 library(tidyr)
 library(patchwork)
 library(tibble) 
@@ -35,6 +25,232 @@ library(wordcloud)
 library(RColorBrewer) 
 library(parcoords)
 ```
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+# load the cleaned dataset
+df <- readRDS(file='data/clean/post_missing.Rda')
+```
+
+After exploring and cleaning the dataset, finally we can start analyzing the inspection results and help public make informed decisions! In this Results chapter, we will answer various questions about violation and safety of New York City Restaurants.
+
+## Total Inspections in New York City
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+t <- df %>%
+  mutate(year=year(insp_date))  %>%
+  select(year, insp_type)
+
+t$year <- as.factor(as.character(t$year))
+colnames(t) <- c('year', 'Inspection.Type')
+
+ggplot(data=t, aes(x=fct_inseq(year), fill=Inspection.Type)) + geom_bar() +
+  labs(x = 'Year', y = 'Count') +
+  ggtitle("Histogram for Violation stacked by Inspection Type") +
+  theme_bw() +
+  theme(axis.text.x = element_text(face = 'bold', size = 10),
+        axis.text.y = element_text(face = 'bold', size = 10)) 
+```
+
+We can see that 2019 recorded the most number of inspections. We see a sudden drop in inspections post that, which could be attributed to the spread of Covid-19. Most frequently carried out inspections are the initial ones followed by re-inspections.
+
+## Consistency of Inspections
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+t <- df %>%
+        group_by(insp_date, boro)%>%
+        summarise(count=n())%>%
+        ungroup()
+
+ggplot(t, aes(insp_date, count)) +
+  geom_line() +
+  facet_wrap(~wday(insp_date, label = TRUE), ncol = 1, strip.position="right") +
+  ylab('Number of Inspections') +
+  xlab('Inspection Date') +
+  ggtitle('Inspections Consistency')
+```
+
+We can see that inspections were carried out on a consistent basis till the start of 2020. The number of inspections carried out during the weekdays were roughly the same. We see a sharp drop after the start of 2020. This was roughly the time of Covid onset. We see things are healing back to normal towards the mid of 2021.
+
+## Inspections in New York City - Borough Level
+
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+t <- df %>%
+  mutate(year=year(insp_date)) %>%
+  select(boro, year) %>%
+  `colnames<-`(c("Borough", "Year")) %>%
+  droplevels()
+
+levels(t$Borough) <- c('B', 'K', 'M', 'Q', 'S')
+
+vcd::mosaic(Borough~Year, t, 
+       direction = c("h","v"), 
+       highlighting_fill=rev(brewer.pal(5, 'RdBu')),
+       rot_labels=c(0,90,45,0),
+       main='Inspections in each borough over the years')
+```
+
+Manhattan seems to have the majority of inspections in any given year. We can also see that most inspections were carried out in 2019. However, the proportion of inspections carried out in each borough remains roughly the same every year. This could mean that out of all the inspections which are to be carried out in a given year, the New York government has fixed ratios for each borough. For example, it seems like it is never the case that for a particular year Staten Island will be given more attention than Manhattan.
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+t <- df %>%
+        group_by(insp_date, boro)%>%
+        summarise(count=n())%>%
+        ungroup()
+
+ggplot(t, aes(insp_date, count)) + geom_line() +
+  facet_wrap(~boro, ncol = 1, strip.position="right") +
+  ylab('Number of Inspections') +
+  xlab('Inspection Date') +
+  ggtitle('Inspections - Borough Level Consistency')
+```
+
+We see that the proportion of inspections carried out varies immensely by the boroughs, however, they are carried out on a consistent basis. We again see a sharp drop similar to one of the above plots.
+
+
+## Frequent Violations
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+t <- df
+
+t <- t %>%
+  count(vio_code, vio_desc, sort = TRUE) %>%
+  slice(1:10) %>%
+  select(vio_code, vio_desc)
+
+t <- df[df$vio_code %in% unique(t$vio_code),] %>%
+  select(vio_code, boro)
+
+colnames(t) <- c('Violation', 'Borough')
+ggplot(data=t, aes(x=fct_infreq(Violation), fill=Borough)) + geom_bar() +
+  labs(x = 'Violation Code', y = 'Count') +
+  ggtitle("Histogram for Violation Codes stacked by Borough") +
+  theme_bw() +
+  theme(axis.text.x = element_text(face = 'bold', size = 10),
+        axis.text.y = element_text(face = 'bold', size = 10)) 
+```
+
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+t <- df
+
+t <- t %>%
+  count(vio_code, vio_desc, sort = TRUE) %>%
+  slice(1:10) %>%
+  select(vio_code, vio_desc)
+
+t$vio_desc <- c('Non-Food Contact Surface', 'Vermin', 'Mice', 'Food Contact Surface', 'Food Contamination','Cold Food Item', 'Plumbing', 'Filth Flies', 'Hot Food Item', 'Roaches')
+t <- t %>% select(c('vio_code', 'vio_desc'))
+colnames(t) <- c('Violation Code', 'Violation')
+reactable(t[c('Violation Code', 'Violation')],  bordered = TRUE, highlight = TRUE)
+```
+
+We can see that Brooklyn, Manhattan and Queens account for the majority of these violations and have roughly the same share. This makes sense because most of the inspections are also carried out in these boroughs. More number of violations in a borough need not necessarily mean the place is unsafe, instead, it means that regular checks are in place to ensure safety. We will confirm this below.
+
+## Sentiment Analysis
+
+In order to understand the sentiment behind these violations, we analyse the word cloud for the most frequent words that occur in their violation description.
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+t <- df
+
+t <- t %>%
+  count(vio_code, vio_desc, sort = TRUE) %>%
+  slice(1:10) %>%
+  select(vio_code, vio_desc)
+
+t <- df[df$vio_code %in% unique(t$vio_code),] %>%
+  select(vio_code, vio_desc)
+
+t$vio_desc <- as.character(t$vio_desc)
+
+docs <- VCorpus(VectorSource(t$vio_desc)) %>%
+  tm_map(tolower) %>%
+  tm_map(removeWords, stopwords("english")) %>%
+  tm_map(removePunctuation) %>%
+  tm_map(PlainTextDocument) %>%
+  tm_map(removeNumbers) %>%
+  tm_map(stripWhitespace)
+
+dtm <- TermDocumentMatrix(docs)
+m <- as.matrix(dtm)
+v <- sort(rowSums(m),decreasing=TRUE)
+d <- data.frame(word = names(v),freq=v)
+```
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+set.seed(1234)
+wordcloud(words = d$word, freq = d$freq, min.freq=200,
+        max.words=70, random.order=FALSE, rot.per=0.5,
+        colors=brewer.pal(8, "Dark2"))
+```
+
+We can see that the sentiment displayed by these violation codes is mostly against the hygiene and safety standards of the restaurants.
+
+## Borough - Grade - Flag - Three Way Analysis
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+t <- df %>%
+  filter(flag %in% c('Critical', 'Not Critical')) %>%
+  filter(grade %in% c('A', 'B', 'C')) %>%
+  select(boro, flag, grade) %>%
+  droplevels()
+
+levels(t$boro) <- c('B', 'K', 'M', 'Q', 'S')
+colnames(t) <- c('Borough', 'Flag', 'Grade')
+vcd::mosaic(Borough~Flag+Grade, t, 
+       direction = c("v","h"), 
+       highlighting_fill=c("red","pink","yellow","lightgreen", "green"),
+       rot_labels=c(0,90,0,0))
+```
+
+We can see that the most frequently awarded grade after an inspection is grade A and Manhattan has the majority share of it. The share of critical flags in each of these boroughs is roughly around 50%, that is, for each of these boroughs, the outcome of an inspection is equi-likely to be either critical or non-critical, however, the most likely grade is A. This tells us that flag is not really dependent on grade. It is possible for a restaurant to have committed a critical violation but overall they have maintained high standards and received grade A.
+
+## Relationship Between Score and Grade
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+t <- df[(df$grade %in% c('A', 'B', 'C')),] %>%
+  select(score, grade)
+
+t <- t[(t$score<50),]
+
+ggplot(data=t, aes(x=score, 
+                   fill=grade)) +
+  geom_histogram(binwidth=2) +
+  scale_fill_manual(values=c("skyblue", "chartreuse3", "coral2")) +
+  labs(x = 'Score') +
+  ggtitle("Distribution of Scores Stacked By Grade") +
+  theme_bw() +
+  theme(axis.text.x = element_text(face = 'bold', size = 10),
+        axis.text.y = element_text(face = 'bold', size = 10)) + 
+  scale_x_continuous(breaks=seq(0,50,by=5))
+```
+
+Here, we can see a strong relation between score and grade. Restaurants with inspections score between 0-13 received grade A, followed by B grade for score in 14-27 and grade C for score greater than 27. This means that score is inversely proportional to safety standards and hygiene.
+
+## Chain vs Non-Chain
+
+### Frequent Offenders - By Critical Violations
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+t <- df %>%
+  filter(flag=='Critical') %>%
+  count(dba, sort = TRUE) %>%
+  slice(1:8) %>%
+  select(dba)
+
+t <- df[df$dba %in% unique(t$dba),] %>%
+  select(dba, boro)
+colnames(t) <- c('DBA', 'Borough')
+
+t$DBA <- factor(t$DBA)
+
+ggplot(data=t, aes(x=fct_rev(fct_infreq(DBA)), fill=Borough)) + geom_bar() +
+  labs(x = 'Chain Restaurant', y = 'Critical Violations') +
+  ggtitle("Histogram for Critical Violators stacked by Borough") +
+  theme_bw() +
+  theme(axis.text.x = element_text(face = 'bold', size = 10),
+        axis.text.y = element_text(face = 'bold', size = 10))  + coord_flip()
+```
+
+We can see that among the chain restaurants, Dunkin is by has the most critical violations. It has roughly the same number of outlets in the boroughs excluding Staten Island.
 
 ```{r, echo=FALSE, include=FALSE}
 # load the cleaned dataset
@@ -81,11 +297,11 @@ Final <- df %>% inner_join(MostRecentInsp)
 df_recent <- distinct(Final)
 ```
 
-After extracting and cleaning the dataset, finally we can start analyzing the New York City Restaurant Inspection result and help public make informed decisions! In this Results chapter, we will answer various questions about violation and safety of New York City Restaurants.
+<!-- After extracting and cleaning the dataset, finally we can start analyzing the New York City Restaurant Inspection result and help public make informed decisions! In this Results chapter, we will answer various questions about violation and safety of New York City Restaurants. -->
 
-## Major Violations
+<!-- ## Major Violations -->
 
-Firstly, we want to check out what are the most common violations committed. Let's pick the major violations of restaurant in NYC.
+<!-- Firstly, we want to check out what are the most common violations committed. Let's pick the major violations of restaurant in NYC. -->
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 df_plot6 <- df_recent
@@ -101,33 +317,33 @@ colnames(top10vio_recent) <- c('Violation_Code', 'Description', 'Count')
 top10vio_recent$pct <- top10vio_recent$Count / sum(top10vio_recent$Count) * 100
 top10vio_recent$pct <- round(top10vio_recent$pct, digits = 0)
 
-ggplot(top10vio_recent, aes(x='', y=pct, fill=reorder(Violation_Code,Count)))+
-  geom_bar(stat='identity')+
-  theme_void()+
-  coord_polar('y', start=0)+
-  geom_text(aes(label=paste0(round(pct,1), '%')),
-            position=position_stack(vjust=0.5),
-            color='white', family='serif', size=7)+
-  scale_fill_viridis(option="H",discrete=TRUE) +
-  labs(fill="Violation Code") + 
-  ggtitle("Most recently, which violations are major?") +
-  theme(plot.title = element_text(face = "bold", size = 15))
+# ggplot(top10vio_recent, aes(x='', y=pct, fill=reorder(Violation_Code,Count)))+
+#   geom_bar(stat='identity')+
+#   theme_void()+
+#   coord_polar('y', start=0)+
+#   geom_text(aes(label=paste0(round(pct,1), '%')),
+#             position=position_stack(vjust=0.5),
+#             color='white', family='serif', size=7)+
+#   scale_fill_viridis(option="H",discrete=TRUE) +
+#   labs(fill="Violation Code") + 
+#   ggtitle("Most recently, which violations are major?") +
+#   theme(plot.title = element_text(face = "bold", size = 15))
 
 ```
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 
-top10vio_recent <- top10vio_recent[order(top10vio_recent$Count),]
-reactable(top10vio_recent[c('Violation_Code','Description')])
+# top10vio_recent <- top10vio_recent[order(top10vio_recent$Count),]
+# reactable(top10vio_recent[c('Violation_Code','Description')])
 
 ```
 
 
-According to the pie chart and description table above, we can check that the most common violation is code 10F, which indicates 'Non-food contact surface improperly constructed. Unacceptable material used...'. It's really dangerous from the first item. If you look at the 4th highest violation (code 6C), it's surprising that the food and ingredients we eat in restaurants are often exposed to contamination. Also, there are many places where mice appear (code 04L). But don't worry. Through the analysis, we will help you avoid these violated restaurants.
+<!-- According to the pie chart and description table above, we can check that the most common violation is code 10F, which indicates 'Non-food contact surface improperly constructed. Unacceptable material used...'. It's really dangerous from the first item. If you look at the 4th highest violation (code 6C), it's surprising that the food and ingredients we eat in restaurants are often exposed to contamination. Also, there are many places where mice appear (code 04L). But don't worry. Through the analysis, we will help you avoid these violated restaurants. -->
 
-## Borough
+<!-- ## Borough -->
 
-We'll firstly figure out which borough gets better grade in inspection.
+<!-- We'll firstly figure out which borough gets better grade in inspection. -->
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 df_plot7 <- df %>% drop_na(grade)
@@ -144,21 +360,21 @@ df_plot7 <- merge(df_plot7, temp, by = "grade")
 df_plot7$freq <- round(df_plot7$count/df_plot7$total, digits = 2)
 
 
-ggplot(df_plot7, aes(x = grade, y = freq, fill = boro)) +
-  geom_bar(position = "fill", stat = "identity") +
-  labs(x="Grade",y="Proportion",fill="Borough") + 
-  ggtitle("Which Borough gets Better Grade?") +
-  theme(plot.title = element_text(face = "bold", size = 15)) +
-  scale_fill_viridis(option="G",discrete=TRUE) +
-  geom_text(aes(label = ifelse(freq == 0, "", scales::percent(freq))),
-            position = position_fill(vjust = 0.5),col = 'white')
+# ggplot(df_plot7, aes(x = grade, y = freq, fill = boro)) +
+#   geom_bar(position = "fill", stat = "identity") +
+#   labs(x="Grade",y="Proportion",fill="Borough") + 
+#   ggtitle("Which Borough gets Better Grade?") +
+#   theme(plot.title = element_text(face = "bold", size = 15)) +
+#   scale_fill_viridis(option="G",discrete=TRUE) +
+#   geom_text(aes(label = ifelse(freq == 0, "", scales::percent(freq))),
+#             position = position_fill(vjust = 0.5),col = 'white')
 
 
 ```
 
-Keep in mind that A is better grade than B, and B is better grade than C. N, P, Z mean not yet graded or grade pending issued. Look at the stacked bar-chart above. Though the proportion of each borough is not significantly different in grade A, B, C, but still, it can be seen that the proportion of Manhattan is highest in grade A. On the other hand, Brooklyn accounts for a high proportion in grade B or C. Therefore, if you are looking for an borough to eat, we recommend Manhattan!
+<!-- Keep in mind that A is better grade than B, and B is better grade than C. N, P, Z mean not yet graded or grade pending issued. Look at the stacked bar-chart above. Though the proportion of each borough is not significantly different in grade A, B, C, but still, it can be seen that the proportion of Manhattan is highest in grade A. On the other hand, Brooklyn accounts for a high proportion in grade B or C. Therefore, if you are looking for an borough to eat, we recommend Manhattan! -->
 
-Then the next thing we are curious about is What are the locations in NYC that have a large number of critical violations? Even if the number of violations is the same, if the violation is serious, you will definitely want to avoid that area.
+<!-- Then the next thing we are curious about is What are the locations in NYC that have a large number of critical violations? Even if the number of violations is the same, if the violation is serious, you will definitely want to avoid that area. -->
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 
@@ -171,20 +387,19 @@ df_plot2 <- df_plot2 %>%
   na.omit %>% 
   mutate(freq = count / sum(count))
 
-ggplot(df_plot2, aes(x = flag, y = freq, fill = flag)) +
-  geom_bar(position = "dodge", stat = "identity") +
-  facet_wrap(~boro) + 
-  scale_y_continuous(limits=c(0,0.8)) +
-  ggtitle("Which Area has more # of Critical Violations?") +
-  scale_fill_manual(values = c("#b2df8a", "#a6cee3")) +
-  labs(y = "Frequency", fill = "") + 
-  theme(plot.title = element_text(face = "bold"), axis.title.x=element_blank(), legend.position = c(0.85, 0.28))
+# ggplot(df_plot2, aes(x = flag, y = freq, fill = flag)) +
+#   geom_bar(position = "dodge", stat = "identity") +
+#   facet_wrap(~boro) + 
+#   scale_y_continuous(limits=c(0,0.8)) +
+#   ggtitle("Which Area has more # of Critical Violations?") +
+#   scale_fill_manual(values = c("#b2df8a", "#a6cee3")) +
+#   labs(y = "Frequency", fill = "") + 
+#   theme(plot.title = element_text(face = "bold"), axis.title.x=element_blank(), legend.position = c(0.85, 0.28))
 
 ```
 
-New York City's inspection report provides information on whether the violation was serious or not, and I was able to create the graph above through this info. But the rate of critical violations does not seem to vary significantly from borough to borough. Fortunately, you don't have to consider this part much when choosing restaurant.
+<!-- New York City's inspection report provides information on whether the violation was serious or not, and I was able to create the graph above through this info. But the rate of critical violations does not seem to vary significantly from borough to borough. Fortunately, you don't have to consider this part much when choosing restaurant. -->
 
-## Chain vs Non-Chain
 
 Let's solve other interesting question this time. Which one do you think is safer, a chain restaurant or a non-chain restaurant?
 
@@ -225,9 +440,58 @@ ggplot(df_plot3, aes(x=chain, y=score, fill = chain)) +
 
 The results were somewhat surprising. Before checking the box plot, note that the higher the violation score is, the more serious the violation is. So the higher violation score means that restaurant is less safe. As a result, non-chain restaurants tended to have higher violation score than chain restaurants in all regions! Presumably, chain restaurants with integrated management pay a bit more attention to hygiene or storage of food. If you want to have a hygienic meal in New York City, you are more likely to have what you want to by going to a chain restaurant.
 
-## Cuisine Category
+## Favourite Cuisine 
 
-If so, how about the category of cuisine? Will the violation score differ depending on the type of restaurant?
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+mydata <- readRDS(file='data/clean/post_missing.Rda')
+t <- mydata %>%
+  count(cuisine, sort = TRUE) %>%
+  slice(1:8) %>%
+  select(cuisine)
+
+t <- mydata[mydata$cuisine %in% unique(t$cuisine),] %>%
+  select(cuisine, boro)
+colnames(t) <- c('Cuisine', 'Borough')
+
+ggplot(data=t, aes(x=fct_rev(fct_infreq(Cuisine)), fill=Borough)) + geom_bar() +
+  labs(x = 'Cuisine', y = 'Count') +
+  ggtitle("Histogram for Cuisine stacked by Borough") +
+  theme_bw() +
+  theme(axis.text.x = element_text(face = 'bold', size = 10),
+        axis.text.y = element_text(face = 'bold', size = 10))  + coord_flip()
+  
+```
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+t <- mydata %>%
+  count(cuisine, sort = TRUE) %>%
+  slice(1:8) %>%
+  select(cuisine)
+
+t<- mydata[mydata$cuisine %in% unique(t$cuisine),] %>%
+  filter(year(insp_date)>=2020)%>%
+  select(boro,cuisine)%>%
+  group_by(boro,cuisine) %>%
+  mutate(count=n())%>%
+  ungroup()%>%
+  distinct()%>%
+  pivot_wider(names_from = "cuisine", values_from = "count")
+
+t%>%
+  parcoords(
+   rownames = F,
+   brushMode = '1D-axes',
+   reorderable = T,
+   queue = T,
+   color = list(colorBy='boro',colorScale = 'scaleOrdinal',colorScheme='schemeCategory10'),
+   withD3 = TRUE )
+
+```
+
+We see that 'American' cuisine is by the most favorite in New York City. We also see that Manhattan has the majority proportions of almost all the top cuisines, making itself more attractive to New Yorkers by offering diversity.
+
+Now we investigate if the violation score differ depending on the type of restaurant?
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
 
@@ -382,273 +646,13 @@ reactable(codetable)
 
 It seems that there is a period between 2020-2021 where the inspection was not conducted due to the corona virus. To see what kinds of violations increased when the inspection was resumed, a trend line was drawn on the scatter plot above. The clearly increasing violation item is code 08A which indicates 'Facility not vermin proof. Harborage or conditions conducive to attracting vermin to the premises and/or allowing vermin to exist.' according to the description table. Due to the long shutdown period, the facilities that prevent vermin are not being managed well.
 
-```{r, echo=FALSE, message=FALSE, warning=FALSE}
-# load the cleaned dataset
-df <- readRDS(file='data/clean/post_missing.Rda')
-```
-
-## Total Inspections in New York City
-
-```{r, echo=FALSE, message=FALSE, warning=FALSE}
-t <- df %>%
-  mutate(year=year(insp_date))  %>%
-  select(year, insp_type)
-
-t$year <- as.factor(as.character(t$year))
-colnames(t) <- c('year', 'Inspection.Type')
-
-ggplot(data=t, aes(x=fct_inseq(year), fill=Inspection.Type)) + geom_bar() +
-  labs(x = 'Year', y = 'Count') +
-  ggtitle("Histogram for Violation Codes stacked by Borough") +
-  theme_bw() +
-  theme(axis.text.x = element_text(face = 'bold', size = 10),
-        axis.text.y = element_text(face = 'bold', size = 10)) 
-```
-
-We can see that 2019 recorded the most number of inspections. We see a sudden drop in inspections post that, which could be attributed to the spread of Covid-19. Most frequently carried out inspections are the initial ones followed by re-inspections.
-
-## Consistency of Inspections
-
-```{r, echo=FALSE, message=FALSE, warning=FALSE}
-t <- df %>%
-        group_by(insp_date, boro)%>%
-        summarise(count=n())%>%
-        ungroup()
-
-ggplot(t, aes(insp_date, count)) +
-  geom_line() +
-  facet_wrap(~wday(insp_date, label = TRUE), ncol = 1, strip.position="right") +
-  ylab('Number of Inspections') +
-  xlab('Inspection Date') +
-  ggtitle('Inspections Consistency')
-```
-
-We can see that inspections were carried out on a consistent basis till the start of 2020. The number of inspections carried out during the weekdays were roughly the same. We see a sharp drop after the start of 2020. This was roughly the time of Covid onset. We see things are healing back to normal towards the mid of 2021.
-
-## Inspections in New York City - Borough Level
-
-```{r, fig.width = 10, fig.height = 7, echo=FALSE, message=FALSE, warning=FALSE}
-t <- df %>%
-  mutate(year=year(insp_date)) %>%
-  select(boro, year) %>%
-  `colnames<-`(c("Borough", "Year")) %>%
-  droplevels()
-
-levels(t$Borough) <- c('B', 'K', 'M', 'Q', 'S')
-
-vcd::mosaic(Borough~Year, t, 
-       direction = c("h","v"), 
-       highlighting_fill=rev(brewer.pal(5, 'RdBu')),
-       rot_labels=c(0,90,45,0),
-       main='Inspections in each borough over the years')
-```
-
-Manhattan seems to have the majority of inspections in any given year. We can also see that most inspections were carried out in 2019. However, the proportion of inspections carried out in each borough remains roughly the same every year. This could mean that out of all the inspections which are to be carried out in a given year, the New York government has fixed ratios for each borough. For example, it seems like it is never the case that for a particular year Staten Island will be given more attention than Manhattan.
-
-```{r, echo=FALSE, message=FALSE, warning=FALSE}
-t <- df %>%
-        group_by(insp_date, boro)%>%
-        summarise(count=n())%>%
-        ungroup()
-
-ggplot(t, aes(insp_date, count)) + geom_line() +
-  facet_wrap(~boro, ncol = 1, strip.position="right") +
-  ylab('Number of Inspections') +
-  xlab('Inspection Date') +
-  ggtitle('Inspections - Borough Level Consistency')
-```
-
-We see that the proportion of inspections carried out varies immensely by the boroughs, however, they are carried out on a consistent basis. We again see a sharp drop similar to one of the above plots.
 
 
-## Frequent Violations
-```{r, echo=FALSE, message=FALSE, warning=FALSE}
-t <- df
-
-t <- t %>%
-  count(vio_code, vio_desc, sort = TRUE) %>%
-  slice(1:10) %>%
-  select(vio_code, vio_desc)
-
-t <- df[df$vio_code %in% unique(t$vio_code),] %>%
-  select(vio_code, boro)
-
-colnames(t) <- c('Violation', 'Borough')
-ggplot(data=t, aes(x=fct_infreq(Violation), fill=Borough)) + geom_bar() +
-  labs(x = 'Violation Code', y = 'Count') +
-  ggtitle("Histogram for Violation Codes stacked by Borough") +
-  theme_bw() +
-  theme(axis.text.x = element_text(face = 'bold', size = 10),
-        axis.text.y = element_text(face = 'bold', size = 10)) 
-```
 
 
-```{r, echo=FALSE, message=FALSE, warning=FALSE}
-t <- df
 
-t <- t %>%
-  count(vio_code, vio_desc, sort = TRUE) %>%
-  slice(1:10) %>%
-  select(vio_code, vio_desc)
 
-t$vio_desc <- c('Non-Food Contact Surface', 'Vermin', 'Mice', 'Food Contact Surface', 'Food Contamination','Cold Food Item', 'Plumbing', 'Filth Flies', 'Hot Food Item', 'Roaches')
-t <- t %>% select(c('vio_code', 'vio_desc'))
-colnames(t) <- c('Violation Code', 'Violation')
-reactable(t[c('Violation Code', 'Violation')],  bordered = TRUE, highlight = TRUE)
-```
 
-We can see that Brooklyn, Manhattan and Queens account for the majority of these violations and have roughly the same share. This makes sense because most of the inspections are also carried out in these boroughs. More number of violations in a borough need not necessarily mean the place is unsafe, instead, it means that regular checks are in place to ensure safety. We will confirm this below.
 
-## Sentiment Analysis
 
-In order to understand the sentiment behind these violations, we analyse the word cloud for the most frequent words that occur in their violation description.
-
-```{r, echo=FALSE, message=FALSE, warning=FALSE}
-t <- df
-
-t <- t %>%
-  count(vio_code, vio_desc, sort = TRUE) %>%
-  slice(1:10) %>%
-  select(vio_code, vio_desc)
-
-t <- df[df$vio_code %in% unique(t$vio_code),] %>%
-  select(vio_code, vio_desc)
-
-t$vio_desc <- as.character(t$vio_desc)
-
-docs <- VCorpus(VectorSource(t$vio_desc)) %>%
-  tm_map(tolower) %>%
-  tm_map(removeWords, stopwords("english")) %>%
-  tm_map(removePunctuation) %>%
-  tm_map(PlainTextDocument) %>%
-  tm_map(removeNumbers) %>%
-  tm_map(stripWhitespace)
-
-dtm <- TermDocumentMatrix(docs)
-m <- as.matrix(dtm)
-v <- sort(rowSums(m),decreasing=TRUE)
-d <- data.frame(word = names(v),freq=v)
-```
-
-```{r, echo=FALSE, message=FALSE, warning=FALSE}
-set.seed(1234)
-wordcloud(words = d$word, freq = d$freq, min.freq=200,
-        max.words=70, random.order=FALSE, rot.per=0.5,
-        colors=brewer.pal(8, "Dark2"))
-```
-
-We can see that the sentiment displayed by these violation codes is mostly against the hygiene and safety standards of the restaurants.
-
-## Borough - Grade - Flag - Three Way Analysis
-```{r, echo=FALSE, message=FALSE, warning=FALSE}
-t <- df %>%
-  filter(flag %in% c('Critical', 'Not Critical')) %>%
-  filter(grade %in% c('A', 'B', 'C')) %>%
-  select(boro, flag, grade) %>%
-  droplevels()
-
-levels(t$boro) <- c('B', 'K', 'M', 'Q', 'S')
-colnames(t) <- c('Borough', 'Flag', 'Grade')
-vcd::mosaic(Borough~Flag+Grade, t, 
-       direction = c("v","h"), 
-       highlighting_fill=c("red","pink","yellow","lightgreen", "green"),
-       rot_labels=c(0,90,0,0))
-```
-
-We can see that the most frequently awarded grade after an inspection is grade A and Manhattan has the majority share of it. The share of critical flags in each of these boroughs is roughly around 50%, that is, for each of these boroughs, the outcome of an inspection is equi-likely to be either critical or non-critical, however, the most likely grade is A. This tells us that flag is not really dependent on grade. It is possible for a restaurant to have committed a critical violation but overall they have maintained high standards and received grade A.
-
-## Relationship Between Score and Grade
-```{r, echo=FALSE, message=FALSE, warning=FALSE}
-t <- df[(df$grade %in% c('A', 'B', 'C')),] %>%
-  select(score, grade)
-
-t <- t[(t$score<50),]
-
-ggplot(data=t, aes(x=score, 
-                   fill=grade)) +
-  geom_histogram(binwidth=2) +
-  scale_fill_manual(values=c("skyblue", "chartreuse3", "coral2")) +
-  labs(x = 'Score') +
-  ggtitle("Distribution of Scores Stacked By Grade") +
-  theme_bw() +
-  theme(axis.text.x = element_text(face = 'bold', size = 10),
-        axis.text.y = element_text(face = 'bold', size = 10)) + 
-  scale_x_continuous(breaks=seq(0,50,by=5))
-```
-
-Here, we can see a strong relation between score and grade. Restaurants with inspections score between 0-13 received grade A, followed by B grade for score in 14-27 and grade C for score greater than 27. This means that score is inversely proportional to safety standards and hygiene.
-
-## Frequent Offenders - By Critical Violations
-
-```{r, echo=FALSE, message=FALSE, warning=FALSE}
-t <- df %>%
-  filter(flag=='Critical') %>%
-  count(dba, sort = TRUE) %>%
-  slice(1:8) %>%
-  select(dba)
-
-t <- df[df$dba %in% unique(t$dba),] %>%
-  select(dba, boro)
-colnames(t) <- c('DBA', 'Borough')
-
-t$DBA <- factor(t$DBA)
-
-ggplot(data=t, aes(x=fct_rev(fct_infreq(DBA)), fill=Borough)) + geom_bar() +
-  labs(x = 'Chain Restaurant', y = 'Count') +
-  ggtitle("Histogram for Critical Violators stacked by Borough") +
-  theme_bw() +
-  theme(axis.text.x = element_text(face = 'bold', size = 10),
-        axis.text.y = element_text(face = 'bold', size = 10))  + coord_flip()
-```
-
-We can see that among the chain restaurants, Dunkin is by has the most critical violations. It has roughly the same number of outlets in the boroughs excluding Staten Island. It is interested to see where the non-chain violators are located aswell.
-
-## Favourite Cuisine
-
-```{r, echo=FALSE, message=FALSE, warning=FALSE}
-t <- df %>%
-  count(cuisine, sort = TRUE) %>%
-  slice(1:8) %>%
-  select(cuisine)
-
-t <- df[df$cuisine %in% unique(t$cuisine),] %>%
-  select(cuisine, boro)
-colnames(t) <- c('Cuisine', 'Borough')
-
-ggplot(data=t, aes(x=fct_rev(fct_infreq(Cuisine)), fill=Borough)) + geom_bar() +
-  labs(x = 'Cuisine', y = 'Count') +
-  ggtitle("Histogram for Cuisine stacked by Borough") +
-  theme_bw() +
-  theme(axis.text.x = element_text(face = 'bold', size = 10),
-        axis.text.y = element_text(face = 'bold', size = 10))  + coord_flip()
-  
-```
-
-```{r, echo=FALSE, message=FALSE, warning=FALSE}
-t <- df %>%
-  count(cuisine, sort = TRUE) %>%
-  slice(1:8) %>%
-  select(cuisine)
-
-t<- df[df$cuisine %in% unique(t$cuisine),] %>%
-  filter(year(insp_date)>=2020)%>%
-  select(boro,cuisine)%>%
-  group_by(boro,cuisine) %>%
-  mutate(count=n())%>%
-  ungroup()%>%
-  distinct()%>%
-  pivot_wider(names_from = "cuisine", values_from = "count")
-
-t%>%
-  parcoords(
-   rownames = F,
-   brushMode = '1D-axes',
-   reorderable = T,
-   queue = T,
-   color = list(colorBy='boro',colorScale = 'scaleOrdinal',colorScheme='schemeCategory10'),
-   withD3 = TRUE )
-
-```
-
-We see that 'American' cuisine is by the most favorite in New York City. We also see that Manhattan has the majority proportions of almost all the top cuisines, making itself more attractive to New Yorkers by offering diversity. 
 
